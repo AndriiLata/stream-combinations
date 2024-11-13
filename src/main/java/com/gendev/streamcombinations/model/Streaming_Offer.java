@@ -19,7 +19,8 @@ public class Streaming_Offer {
     public Streaming_Offer() {
     }
 
-    public Streaming_Offer(int streaming_package_id, int live, int highlights) {
+    public Streaming_Offer(Long id, int streaming_package_id, int live, int highlights) {
+        this.id = id;
         this.streaming_package_id = streaming_package_id;
         this.live = live;
         this.highlights = highlights;

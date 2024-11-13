@@ -21,7 +21,8 @@ public class Game {
     public Game() {
     }
 
-    public Game(String team_home, String team_away, LocalDateTime starts_at, String tournament_name) {
+    public Game(Long id, String team_home, String team_away, LocalDateTime starts_at, String tournament_name) {
+        this.id = id;
         this.team_home = team_home;
         this.team_away = team_away;
         this.starts_at = starts_at;

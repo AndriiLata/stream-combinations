@@ -19,7 +19,8 @@ public class Streaming_Package {
     public Streaming_Package() {
     }
 
-    public Streaming_Package(String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
+    public Streaming_Package(Long id, String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
+        this.id = id;
         this.name = name;
         this.monthly_price_cents = monthly_price_cents;
         this.monthly_price_yearly_subscription_in_cents = monthly_price_yearly_subscription_in_cents;
