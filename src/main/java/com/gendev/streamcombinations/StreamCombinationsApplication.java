@@ -1,4 +1,4 @@
-package com.example.streamcombinations;
+package com.gendev.streamcombinations;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
