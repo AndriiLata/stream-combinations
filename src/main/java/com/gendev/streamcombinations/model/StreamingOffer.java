@@ -5,9 +5,10 @@ import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+
 @Getter
-public class Streaming_Offer {
+@Entity
+public class StreamingOffer {
 
     @Id
     private Long id;
@@ -16,10 +17,10 @@ public class Streaming_Offer {
     private int live;
     private int highlights;
 
-    public Streaming_Offer() {
+    public StreamingOffer() {
     }
 
-    public Streaming_Offer(Long id, int streaming_package_id, int live, int highlights) {
+    public StreamingOffer(Long id, int streaming_package_id, int live, int highlights) {
         this.id = id;
         this.streaming_package_id = streaming_package_id;
         this.live = live;

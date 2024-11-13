@@ -5,9 +5,10 @@ import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+
 @Getter
-public class Streaming_Package {
+@Entity
+public class StreamingPackage {
 
     @Id
     private Long id;
@@ -16,10 +17,10 @@ public class Streaming_Package {
     private int monthly_price_cents;
     private int monthly_price_yearly_subscription_in_cents;
 
-    public Streaming_Package() {
+    public StreamingPackage() {
     }
 
-    public Streaming_Package(Long id, String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
+    public StreamingPackage(Long id, String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
         this.id = id;
         this.name = name;
         this.monthly_price_cents = monthly_price_cents;
