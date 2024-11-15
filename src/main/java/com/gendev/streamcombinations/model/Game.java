@@ -2,8 +2,8 @@ package com.gendev.streamcombinations.model;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +20,7 @@ public class Game {
 
     public Game() {
     }
-
+    // ToDo: Change starts_at to LocalDateTime
     public Game(Long id, String team_home, String team_away, String starts_at, String tournament_name) {
         this.id = id;
         this.team_home = team_home;
