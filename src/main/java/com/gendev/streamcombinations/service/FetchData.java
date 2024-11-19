@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//ToDo: Test if this works
-
 @Getter
 @Service
 public class FetchData {

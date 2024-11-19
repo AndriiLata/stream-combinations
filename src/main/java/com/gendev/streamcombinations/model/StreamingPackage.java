@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 public class StreamingPackage {
 
     @Id
-    private Long id;
+    private int id;
 
     private String name;
     private int monthly_price_cents;
@@ -20,7 +20,7 @@ public class StreamingPackage {
     public StreamingPackage() {
     }
 
-    public StreamingPackage(Long id, String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
+    public StreamingPackage(int id, String name, int monthly_price_cents, int monthly_price_yearly_subscription_in_cents) {
         this.id = id;
         this.name = name;
         this.monthly_price_cents = monthly_price_cents;

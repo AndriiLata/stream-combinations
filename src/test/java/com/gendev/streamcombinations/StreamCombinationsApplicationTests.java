@@ -8,6 +8,7 @@ class StreamCombinationsApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

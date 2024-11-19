@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Game {
 
     @Id
-    private Long id;
+    private int id;
 
     private String team_home;
     private String team_away;
@@ -21,7 +21,7 @@ public class Game {
     public Game() {
     }
     // ToDo: Change starts_at to LocalDateTime
-    public Game(Long id, String team_home, String team_away, String starts_at, String tournament_name) {
+    public Game(int id, String team_home, String team_away, String starts_at, String tournament_name) {
         this.id = id;
         this.team_home = team_home;
         this.team_away = team_away;

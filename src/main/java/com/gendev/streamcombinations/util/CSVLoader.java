@@ -23,7 +23,7 @@ public class CSVLoader {
             String[] line;
             reader.readNext(); // skip header
             while ((line = reader.readNext()) != null) {
-                Game game = new Game(Long.parseLong(line[0]), line[1], line[2], line[3], line[4]);
+                Game game = new Game(Integer.parseInt(line[0]), line[1], line[2], line[3], line[4]);
 
                 games.add(game);
             }
@@ -43,7 +43,7 @@ public class CSVLoader {
             while ((line = reader.readNext()) != null) {
                 int parsedValue = Objects.equals(line[2], "") ? 7777 : Integer.parseInt(line[2]); //ToDo: Definetly need to change this
 
-                StreamingPackage streamingPackage = new StreamingPackage(Long.parseLong(line[0]), line[1], parsedValue, Integer.parseInt(line[3]));
+                StreamingPackage streamingPackage = new StreamingPackage(Integer.parseInt(line[0]), line[1], parsedValue, Integer.parseInt(line[3]));
 
                 streamingPackages.add(streamingPackage);
             }
@@ -61,7 +61,7 @@ public class CSVLoader {
             String[] line;
             reader.readNext(); // skip header
             while ((line = reader.readNext()) != null) {
-                StreamingOffer streamingOffer = new StreamingOffer(Long.parseLong(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2]), Integer.parseInt(line[3]));
+                StreamingOffer streamingOffer = new StreamingOffer(Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2]), Integer.parseInt(line[3]));
 
                 streamingOffers.add(streamingOffer);
             }
