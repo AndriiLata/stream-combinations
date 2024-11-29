@@ -5,9 +5,9 @@ import com.google.ortools.linearsolver.*;
 
 import java.util.*;
 
-public class SearchAlgorithm {
+public class SearchAlgorithmCheapest {
 
-    public static Map<String, Object> findOptimalPackages(Map<Integer, Set<Integer>> gamePackages,
+    public static Map<String, Set<Integer>> findOptimalPackages(Map<Integer, Set<Integer>> gamePackages,
                                                           Map<Integer, Integer> packagePrices,
                                                           Set<Integer> allGames) {
         Loader.loadNativeLibraries(); // Ensure OR-Tools native libraries are loaded
@@ -74,7 +74,7 @@ public class SearchAlgorithm {
         }
 
         // Prepare the result
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Set<Integer>> result = new HashMap<>();
         result.put("selectedPackages", selectedPackages);
         result.put("uncoveredGames", uncoveredGames); // Include uncovered games for reporting
 

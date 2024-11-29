@@ -8,7 +8,7 @@ import com.gendev.streamcombinations.service.FetchData;
 
 import java.util.*;
 
-import static com.gendev.streamcombinations.service.searching.SearchAlgorithm.findOptimalPackages;
+import static com.gendev.streamcombinations.service.searching.SearchAlgorithmCheapest.findOptimalPackages;
 
 // here I want to find a list of the cheapest services for a single team.
 // In the end I want to have a hashmap which has -> Sorted array of services by price per Team -> <SortedList, Team>
@@ -76,45 +76,6 @@ public class CheapestForSingle {
         return gpft;
     }
 
-    public static void main(String[] args) {
-        CheapestForSingle cfs = new CheapestForSingle();
-        String team = "Slowenien";
-
-        Set<Integer> gameIds = cfs.findGameIdsForTeam(team);
-        System.out.println(gameIds);
-
-
-//        Set<Integer> gameIds = cfs.intersectionIDs(team, 5);
-//        System.out.println(gameIds);
-//
-
-        Map<Integer, Set<Integer>> gamePackages = cfs.gamePackagesForTeam(team);
-        System.out.println(gamePackages);
-//
-//        Map<Integer, Integer> servicePrices = new HashMap<>();
-//        for(StreamingPackage sp: cfs.sPackeges){
-//            servicePrices.put(sp.getId(), sp.getMonthly_price_yearly_subscription_in_cents());
-//        }
-////
-//        GreedyAlgorithm gd = new GreedyAlgorithm(cfs.gamePackagesForTeam("Schweiz"), servicePrices, cfs.findGameIdsForTeam("Schweiz"));
-//        Set<Integer> cheapestCombination = gd.getCheapestCombination();
-//        for(Integer i: cheapestCombination){
-//            System.out.println(i);
-//        }
-
-
-        Map<Integer, Set<Integer>> gpFt = cfs.gamePackagesForTeam(team);
-        Map<Integer, Integer> servicePrices = new HashMap<>();
-        for(StreamingPackage sp: cfs.sPackeges){
-            servicePrices.put(sp.getId(), sp.getMonthly_price_yearly_subscription_in_cents());
-        }
-        Set<Integer> fGiFT = cfs.findGameIdsForTeam(team);
-        Map<String, Object> result = findOptimalPackages(gpFt, servicePrices, fGiFT);
-
-        System.out.println("Optimal Packages: " + result.get("selectedPackages"));
-        System.out.println("Uncovered Games: " + result.get("uncoveredGames"));
-
-    }
 
 
 }

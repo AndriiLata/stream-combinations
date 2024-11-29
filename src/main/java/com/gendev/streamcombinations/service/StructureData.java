@@ -6,8 +6,6 @@ import com.gendev.streamcombinations.model.StreamingPackage;
 
 import java.util.*;
 
-import static com.gendev.streamcombinations.service.searching.SearchAlgorithm.findOptimalPackages;
-
 public class StructureData {
 
     private List<Game> games;
@@ -58,7 +56,8 @@ public class StructureData {
 
         return intersectionIDs;
     }
-
+ //The first Integer tells the id of the service and
+ // Set<Integer> tells what games - of the teams I am interested in - this service is streaming.
     public Map<Integer, Set<Integer>> gamePackagesForTeams(List<String> teams) {
         Map<Integer, Set<Integer>> gpft = new HashMap<>();
 
@@ -79,6 +78,13 @@ public class StructureData {
             servicePrices.put(sp.getId(), sp.getMonthly_price_yearly_subscription_in_cents());
         }
         return servicePrices;
+    }
+
+    public static void main(String[] args) {
+        StructureData sd = new StructureData();
+        List<String> teams = List.of("Bayern München");
+        System.out.println(sd.findGameIdsForTeams(teams));
+
     }
 
 
