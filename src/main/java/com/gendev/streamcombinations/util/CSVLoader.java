@@ -9,6 +9,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class CSVLoader {
             String[] line;
             reader.readNext(); // skip header
             while ((line = reader.readNext()) != null) {
-                Game game = new Game(Integer.parseInt(line[0]), line[1], line[2], line[3], line[4]);
+                Game game = new Game(Integer.parseInt(line[0]), line[1], line[2], DateUtils.parse(line[3]), line[4]);
 
                 games.add(game);
             }

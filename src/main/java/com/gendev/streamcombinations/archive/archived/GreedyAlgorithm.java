@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.service.archived;
+package com.gendev.streamcombinations.archive.archived;
 
 
 import java.util.HashSet;

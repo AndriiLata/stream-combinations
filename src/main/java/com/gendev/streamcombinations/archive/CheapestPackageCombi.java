@@ -1,6 +1,6 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.archive;
 
-import com.gendev.streamcombinations.service.searching.SearchAlgorithmCheapest;
+import com.gendev.streamcombinations.archive.searching.SearchAlgorithmCheapest;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class CheapestPackageCombi {
     }
 
     // Use String -> "Optimal Packages: " / "Uncovered Games: "
-    public Map<String, Set<Integer>> cheapestPackagesForTeams(List<String> teams) {
+    public Map<String, Object> cheapestPackagesForTeams(List<String> teams) {
         Map<Integer, Set<Integer>> gPFT = sd.gamePackagesForTeams(teams);
         // ToDo: So far it is only yearly subscription, in future it should be possible to choose between monthly and yearly subscription
         Map<Integer, Integer> servicePricesYearlySubscription = sd.servicePricesYearlySubscription();
@@ -27,9 +27,9 @@ public class CheapestPackageCombi {
 
     public static void main(String[] args) {
         CheapestPackageCombi cpc = new CheapestPackageCombi();
-        List<String> teams = List.of("Bayern München");
+        List<String> teams = List.of("Hatayspor", "Deutschland", "Bayern München");
 
-        Map<String, Set<Integer>> result = cpc.cheapestPackagesForTeams(teams);
+        Map<String, Object> result = cpc.cheapestPackagesForTeams(teams);
 
         System.out.println("Optimal Packages: " + result.get("selectedPackages"));
         System.out.println("Uncovered Games: " + result.get("uncoveredGames"));

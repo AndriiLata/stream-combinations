@@ -1,8 +1,9 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.archive;
 
 import com.gendev.streamcombinations.model.Game;
 import com.gendev.streamcombinations.model.StreamingOffer;
 import com.gendev.streamcombinations.model.StreamingPackage;
+import com.gendev.streamcombinations.util.FetchData;
 
 import java.util.*;
 

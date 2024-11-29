@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.service.searching;
+package com.gendev.streamcombinations.archive.searching;
 
 import com.google.ortools.Loader;
 import com.google.ortools.linearsolver.*;
@@ -7,7 +7,7 @@ import java.util.*;
 
 public class SearchAlgorithmCheapest {
 
-    public static Map<String, Set<Integer>> findOptimalPackages(Map<Integer, Set<Integer>> gamePackages,
+    public static Map<String, Object> findOptimalPackages(Map<Integer, Set<Integer>> gamePackages,
                                                           Map<Integer, Integer> packagePrices,
                                                           Set<Integer> allGames) {
         Loader.loadNativeLibraries(); // Ensure OR-Tools native libraries are loaded
@@ -66,20 +66,30 @@ public class SearchAlgorithmCheapest {
         }
 
         // Extract the selected packages
-        Set<Integer> selectedPackages = new HashSet<>();
+        Set<Integer> selectedPackageIds = new HashSet<>();
         for (Map.Entry<Integer, MPVariable> entry : variables.entrySet()) {
             if (entry.getValue().solutionValue() > 0.5) { // Check if the variable is selected
-                selectedPackages.add(entry.getKey());
+                selectedPackageIds.add(entry.getKey());
             }
         }
 
+        // Prepare the selectedPackages map with games they cover from 'allGames'
+        Map<Integer, Set<Integer>> selectedPackages = new HashMap<>();
+        for (Integer packageId : selectedPackageIds) {
+            Set<Integer> gamesCovered = new HashSet<>(gamePackages.get(packageId));
+            gamesCovered.retainAll(allGames); // Include only the games from 'allGames'
+            selectedPackages.put(packageId, gamesCovered);
+        }
+
         // Prepare the result
-        Map<String, Set<Integer>> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("selectedPackages", selectedPackages);
         result.put("uncoveredGames", uncoveredGames); // Include uncovered games for reporting
 
         return result;
     }
+
+
 
 
 

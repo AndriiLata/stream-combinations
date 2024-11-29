@@ -1,14 +1,12 @@
-package com.gendev.streamcombinations.service.archived;
+package com.gendev.streamcombinations.archive.archived;
 
 
 import com.gendev.streamcombinations.model.Game;
 import com.gendev.streamcombinations.model.StreamingOffer;
 import com.gendev.streamcombinations.model.StreamingPackage;
-import com.gendev.streamcombinations.service.FetchData;
+import com.gendev.streamcombinations.util.FetchData;
 
 import java.util.*;
-
-import static com.gendev.streamcombinations.service.searching.SearchAlgorithmCheapest.findOptimalPackages;
 
 // here I want to find a list of the cheapest services for a single team.
 // In the end I want to have a hashmap which has -> Sorted array of services by price per Team -> <SortedList, Team>

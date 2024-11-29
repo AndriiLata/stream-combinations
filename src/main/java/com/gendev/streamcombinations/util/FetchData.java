@@ -1,9 +1,8 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.util;
 
 import com.gendev.streamcombinations.model.Game;
 import com.gendev.streamcombinations.model.StreamingOffer;
 import com.gendev.streamcombinations.model.StreamingPackage;
-import com.gendev.streamcombinations.util.CSVLoader;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
