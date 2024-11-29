@@ -1,7 +1,5 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.service.archived;
 
-
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.HashSet;
 import java.util.Map;

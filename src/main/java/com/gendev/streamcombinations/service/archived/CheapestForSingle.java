@@ -1,11 +1,14 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.service.archived;
 
 
 import com.gendev.streamcombinations.model.Game;
 import com.gendev.streamcombinations.model.StreamingOffer;
 import com.gendev.streamcombinations.model.StreamingPackage;
+import com.gendev.streamcombinations.service.FetchData;
 
 import java.util.*;
+
+import static com.gendev.streamcombinations.service.searching.SearchAlgorithm.findOptimalPackages;
 
 // here I want to find a list of the cheapest services for a single team.
 // In the end I want to have a hashmap which has -> Sorted array of services by price per Team -> <SortedList, Team>
@@ -25,7 +28,7 @@ public class CheapestForSingle {
         this.sPackeges = fd.getStreamingPackages();
     }
 
-    //Searches all games for a specific team and returns a HashSet of game IDs
+    //Returns all gameIDs for a specific team
     public Set<Integer> findGameIdsForTeam(String team){
         Set<Integer> gameIDs = new HashSet<>();
         for(Game game: this.games){
@@ -36,7 +39,7 @@ public class CheapestForSingle {
         return gameIDs;
     }
 
-    //Set of all Games that streamingPackage is streaming
+    //Set of all Game IDs that this streamingPackage is streaming
     public Set<Integer> findGameIdsForPackage(int packageID){
         Set<Integer> gameIDs = new HashSet<>();
         for(StreamingOffer sOffer: this.sOffers){
@@ -47,7 +50,7 @@ public class CheapestForSingle {
         return gameIDs;
     }
 
-    //Set of what games this Package cover for this team
+    //Set of game IDs this Package cover for this team
     public Set<Integer> intersectionIDs(String team, int packageID){
         Set<Integer> gameIDsTeam = findGameIdsForTeam(team);
         Set<Integer> gameIDsPackage = findGameIdsForPackage(packageID);
@@ -59,7 +62,7 @@ public class CheapestForSingle {
         return intersectionIDs;
     }
 
-    //For this team, those packages cover that games
+    //We search with the team name and get a map with the packageID and the gameIDs that are covered
     public Map<Integer, Set<Integer>> gamePackagesForTeam(String team){
         Map<Integer, Set<Integer>> gpft = new HashMap<>();
 
@@ -75,28 +78,42 @@ public class CheapestForSingle {
 
     public static void main(String[] args) {
         CheapestForSingle cfs = new CheapestForSingle();
+        String team = "Slowenien";
 
-//        Set<Integer> gameIds = cfs.findGameIdsForTeam("RB Leipzig");
-//        System.out.println(gameIds);
+        Set<Integer> gameIds = cfs.findGameIdsForTeam(team);
+        System.out.println(gameIds);
 
 
-//        Set<Integer> gameIds = cfs.intersectionIDs("Deutschland", 2);
+//        Set<Integer> gameIds = cfs.intersectionIDs(team, 5);
 //        System.out.println(gameIds);
 //
 
-        Map<Integer, Set<Integer>> gamePackages = cfs.gamePackagesForTeam("Schweiz");
+        Map<Integer, Set<Integer>> gamePackages = cfs.gamePackagesForTeam(team);
         System.out.println(gamePackages);
+//
+//        Map<Integer, Integer> servicePrices = new HashMap<>();
+//        for(StreamingPackage sp: cfs.sPackeges){
+//            servicePrices.put(sp.getId(), sp.getMonthly_price_yearly_subscription_in_cents());
+//        }
+////
+//        GreedyAlgorithm gd = new GreedyAlgorithm(cfs.gamePackagesForTeam("Schweiz"), servicePrices, cfs.findGameIdsForTeam("Schweiz"));
+//        Set<Integer> cheapestCombination = gd.getCheapestCombination();
+//        for(Integer i: cheapestCombination){
+//            System.out.println(i);
+//        }
 
+
+        Map<Integer, Set<Integer>> gpFt = cfs.gamePackagesForTeam(team);
         Map<Integer, Integer> servicePrices = new HashMap<>();
         for(StreamingPackage sp: cfs.sPackeges){
             servicePrices.put(sp.getId(), sp.getMonthly_price_yearly_subscription_in_cents());
         }
-//
-        GreedyAlgorithm gd = new GreedyAlgorithm(cfs.gamePackagesForTeam("Schweiz"), servicePrices, cfs.findGameIdsForTeam("Schweiz"));
-        Set<Integer> cheapestCombination = gd.getCheapestCombination();
-        for(Integer i: cheapestCombination){
-            System.out.println(i);
-        }
+        Set<Integer> fGiFT = cfs.findGameIdsForTeam(team);
+        Map<String, Object> result = findOptimalPackages(gpFt, servicePrices, fGiFT);
+
+        System.out.println("Optimal Packages: " + result.get("selectedPackages"));
+        System.out.println("Uncovered Games: " + result.get("uncoveredGames"));
+
     }
 
 
