@@ -1,6 +1,7 @@
 package com.gendev.streamcombinations.controller;
 
 import com.gendev.streamcombinations.model.*;
+import com.gendev.streamcombinations.model.response.SearchResult;
 import com.gendev.streamcombinations.service.*;
 import com.gendev.streamcombinations.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +24,29 @@ public class StreamingController {
         return streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
     }
 
-    @GetMapping("/cheapest-packages")
-    public List<StreamingPackage> getCheapestPackages(@RequestParam(required = false) Set<String> teams,
-                                              @RequestParam(required = false) Set<String> tournaments,
-                                              @RequestParam(required = false) String startDate,
-                                              @RequestParam(required = false) String endDate) {
-        Set<Game> games = streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
-        return streamingService.findCheapestCombination(games);
-    }
 
     @GetMapping("/least-packages")
-    public List<StreamingPackage> getLeastPackages(@RequestParam(required = false) Set<String> teams,
+    public SearchResult getLeastPackages(@RequestParam(required = false) Set<String> teams,
                                               @RequestParam(required = false) Set<String> tournaments,
                                               @RequestParam(required = false) String startDate,
                                               @RequestParam(required = false) String endDate) {
         Set<Game> games = streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
-        return streamingService.findLeastServicesCombination(games);
+        List<StreamingPackage> streamingPackages = streamingService.findLeastServicesCombination(games);
+        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = streamingService.buildPackageToGameOffers(games);
+        return new SearchResult(games, streamingPackages, packageToGameOffers);
     }
 
+    @GetMapping("/cheapest-packages")
+    public SearchResult getCheapsetPackages(@RequestParam(required = false) Set<String> teams,
+                                            @RequestParam(required = false) Set<String> tournaments,
+                                            @RequestParam(required = false) String startDate,
+                                            @RequestParam(required = false) String endDate) {
+        Set<Game> games = streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
+        List<StreamingPackage> streamingPackages = streamingService.findCheapestCombination(games);
+        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = streamingService.buildPackageToGameOffers(games);
+
+
+        return new SearchResult(games, streamingPackages, packageToGameOffers);
+    }
 
 }
