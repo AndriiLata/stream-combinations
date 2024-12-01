@@ -9,10 +9,10 @@ public class GameOffer {
     private boolean live;
     private boolean highlights;
 
-    public GameOffer(Game game, int live, int highlights) {
+    public GameOffer(Game game, boolean live, boolean highlights) {
         this.game = game;
-        this.live = live == 1;
-        this.highlights = highlights == 1;
+        this.live = live;
+        this.highlights = highlights;
     }
 
 }

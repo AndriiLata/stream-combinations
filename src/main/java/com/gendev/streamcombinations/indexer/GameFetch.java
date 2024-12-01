@@ -1,15 +1,13 @@
 package com.gendev.streamcombinations.indexer;
 import com.gendev.streamcombinations.model.Game;
-import com.gendev.streamcombinations.util.DateUtils;
 import com.gendev.streamcombinations.util.FetchData;
-import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-
-@Getter
+@Service
 public class GameFetch {
 
     private final Map<Integer, Game> gamesById = new HashMap<>();
@@ -17,19 +15,25 @@ public class GameFetch {
     private final Map<String, Set<Game>> gamesByTournament = new HashMap<>();
     private final NavigableMap<LocalDateTime, Set<Game>> gamesByDate = new TreeMap<>();
 
-    public GameFetch(List<Game> gamesList) {
-        for (Game game: gamesList){
-            gamesById.put(game.getId(), game);
+    @Autowired
+    public GameFetch(FetchData fetchData) {
+        List<Game> gamesList = fetchData.getGames();
+        if(gamesList != null) {
+            for (Game game : gamesList) {
+                gamesById.put(game.getId(), game);
 
-            // Index by team
-            gamesByTeam.computeIfAbsent(game.getTeam_home(), k -> new HashSet<>()).add(game);
-            gamesByTeam.computeIfAbsent(game.getTeam_away(), k -> new HashSet<>()).add(game);
+                // Index by team
+                gamesByTeam.computeIfAbsent(game.getTeam_home(), k -> new HashSet<>()).add(game);
+                gamesByTeam.computeIfAbsent(game.getTeam_away(), k -> new HashSet<>()).add(game);
 
-            // Index by tournament
-            gamesByTournament.computeIfAbsent(game.getTournament_name(), k -> new HashSet<>()).add(game);
+                // Index by tournament
+                gamesByTournament.computeIfAbsent(game.getTournament_name(), k -> new HashSet<>()).add(game);
 
-            // Index by date
-            gamesByDate.computeIfAbsent(game.getStarts_at(), k -> new HashSet<>()).add(game);
+                // Index by date
+                gamesByDate.computeIfAbsent(game.getStarts_at(), k -> new HashSet<>()).add(game);
+            }
+        } else {
+            System.out.println("No games found! Cant read your CSV file");
         }
     }
 

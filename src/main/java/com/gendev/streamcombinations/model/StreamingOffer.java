@@ -14,8 +14,8 @@ public class StreamingOffer {
     private int id;
 
     private int streaming_package_id;
-    private int live;
-    private int highlights;
+    private boolean live;
+    private boolean highlights;
 
     public StreamingOffer() {
     }
@@ -23,8 +23,8 @@ public class StreamingOffer {
     public StreamingOffer(int id, int streaming_package_id, int live, int highlights) {
         this.id = id;
         this.streaming_package_id = streaming_package_id;
-        this.live = live;
-        this.highlights = highlights;
+        this.live = live == 1;
+        this.highlights = highlights == 1;
     }
 
 }

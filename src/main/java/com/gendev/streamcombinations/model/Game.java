@@ -20,7 +20,7 @@ public class Game {
 
     public Game() {
     }
-    // ToDo: Change starts_at to LocalDateTime
+
     public Game(int id, String team_home, String team_away, LocalDateTime starts_at, String tournament_name) {
         this.id = id;
         this.team_home = team_home;
