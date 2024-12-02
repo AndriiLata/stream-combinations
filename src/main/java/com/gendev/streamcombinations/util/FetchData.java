@@ -1,12 +1,14 @@
 package com.gendev.streamcombinations.util;
 
-import com.gendev.streamcombinations.model.Game;
-import com.gendev.streamcombinations.model.StreamingOffer;
-import com.gendev.streamcombinations.model.StreamingPackage;
+import com.gendev.streamcombinations.model.TeamCountry;
+import com.gendev.streamcombinations.model.main.Game;
+import com.gendev.streamcombinations.model.main.StreamingOffer;
+import com.gendev.streamcombinations.model.main.StreamingPackage;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Service
@@ -14,6 +16,7 @@ public class FetchData {
     private final List<Game> games;
     private final List<StreamingOffer> streamingOffers;
     private final List<StreamingPackage> streamingPackages;
+    private final Set<TeamCountry> teamCountries;
 
 
     public FetchData() {
@@ -21,6 +24,7 @@ public class FetchData {
         this.games = loader.loadGamesFromCSV("/Users/andriilata/Desktop/GenDev24/bc_game.csv");
         this.streamingOffers = loader.loadStreamingOfferFromCSV("/Users/andriilata/Desktop/GenDev24/bc_streaming_offer.csv");
         this.streamingPackages = loader.loadStreamingPackageFromCSV("/Users/andriilata/Desktop/GenDev24/bc_streaming_package.csv");
+        this.teamCountries = loader.loadTeamCountryFromCSV("/Users/andriilata/Desktop/GenDev24/teams_countries.csv");
     }
 
 

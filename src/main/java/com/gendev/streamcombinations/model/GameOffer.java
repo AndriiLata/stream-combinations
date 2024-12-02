@@ -1,5 +1,6 @@
 package com.gendev.streamcombinations.model;
 
+import com.gendev.streamcombinations.model.main.Game;
 import lombok.Getter;
 
 @Getter

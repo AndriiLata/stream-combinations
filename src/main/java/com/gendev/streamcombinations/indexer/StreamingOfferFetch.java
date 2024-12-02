@@ -1,9 +1,6 @@
 package com.gendev.streamcombinations.indexer;
-import com.gendev.streamcombinations.model.StreamingOffer;
+import com.gendev.streamcombinations.model.main.StreamingOffer;
 import com.gendev.streamcombinations.util.FetchData;
-import lombok.Getter;
-import org.hibernate.annotations.Fetch;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

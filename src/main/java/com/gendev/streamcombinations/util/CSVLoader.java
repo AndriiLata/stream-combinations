@@ -1,18 +1,15 @@
 package com.gendev.streamcombinations.util;
 
-import com.gendev.streamcombinations.model.Game;
-import com.gendev.streamcombinations.model.StreamingOffer;
-import com.gendev.streamcombinations.model.StreamingPackage;
+import com.gendev.streamcombinations.model.TeamCountry;
+import com.gendev.streamcombinations.model.main.Game;
+import com.gendev.streamcombinations.model.main.StreamingOffer;
+import com.gendev.streamcombinations.model.main.StreamingPackage;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 public class CSVLoader {
@@ -71,6 +68,24 @@ public class CSVLoader {
         }
 
         return streamingOffers;
+    }
+
+    public Set<TeamCountry> loadTeamCountryFromCSV(String filePath){
+        Set<TeamCountry> teamCountries = new HashSet<>();
+
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            String[] line;
+            reader.readNext(); // skip header
+            while ((line = reader.readNext()) != null) {
+                TeamCountry teamCountry = new TeamCountry(line[0], line[1]);
+
+                teamCountries.add(teamCountry);
+            }
+        } catch (IOException | CsvValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        return teamCountries;
     }
 
 // JUST FOR TESTING

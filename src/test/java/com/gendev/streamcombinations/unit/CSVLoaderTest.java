@@ -1,13 +1,11 @@
 package com.gendev.streamcombinations.unit;
 
-import com.gendev.streamcombinations.model.Game;
-import com.gendev.streamcombinations.model.StreamingOffer;
-import com.gendev.streamcombinations.model.StreamingPackage;
+import com.gendev.streamcombinations.model.main.Game;
+import com.gendev.streamcombinations.model.main.StreamingOffer;
+import com.gendev.streamcombinations.model.main.StreamingPackage;
 import com.gendev.streamcombinations.util.CSVLoader;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 

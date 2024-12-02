@@ -1,5 +1,5 @@
 package com.gendev.streamcombinations.indexer;
-import com.gendev.streamcombinations.model.Game;
+import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.util.FetchData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +57,14 @@ public class GameFetch {
 
     public Game getGameById(int id) {
         return gamesById.get(id);
+    }
+
+    public Set<String> getAllTournaments() {
+        return new HashSet<>(gamesByTournament.keySet());
+    }
+
+    public Set<String> getAllTeams() {
+        return new HashSet<>(gamesByTeam.keySet());
     }
 
 
