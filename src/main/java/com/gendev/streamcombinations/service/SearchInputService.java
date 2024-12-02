@@ -1,5 +1,6 @@
 package com.gendev.streamcombinations.service;
 
+import com.gendev.streamcombinations.model.helper.TeamCountry;
 import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.response.CountryTeamTournament;
 import com.gendev.streamcombinations.util.FetchData;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import com.gendev.streamcombinations.indexer.*;
-import com.gendev.streamcombinations.model.*;
 
 @Service
 public class SearchInputService {

@@ -1,6 +1,4 @@
-package com.gendev.streamcombinations.model;
-
-import jakarta.persistence.Entity;
+package com.gendev.streamcombinations.model.helper;
 
 
 public class TeamCountry {

@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.model;
+package com.gendev.streamcombinations.model.helper;
 
 import lombok.Getter;
 

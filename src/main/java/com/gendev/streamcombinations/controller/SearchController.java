@@ -13,9 +13,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/search")
 public class SearchController {
-    //ToDo: Implement api for showing games, tournaments to search
-
-    //ToDo: Show all teams and tournaments based on location (All, America, Europe, etc)
     @Autowired
     private GameFetch gameFetch;
     @Autowired

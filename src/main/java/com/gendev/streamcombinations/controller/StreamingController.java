@@ -1,7 +1,7 @@
 package com.gendev.streamcombinations.controller;
 
 import com.gendev.streamcombinations.model.main.Game;
-import com.gendev.streamcombinations.model.GameOffer;
+import com.gendev.streamcombinations.model.helper.GameOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;
 import com.gendev.streamcombinations.model.response.SearchResult;
 import com.gendev.streamcombinations.service.*;

@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.model;
+package com.gendev.streamcombinations.model.helper;
 
 import com.gendev.streamcombinations.model.main.Game;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.gendev.streamcombinations.service;
 import com.gendev.streamcombinations.indexer.*;
 import com.gendev.streamcombinations.model.main.Game;
-import com.gendev.streamcombinations.model.GameOffer;
+import com.gendev.streamcombinations.model.helper.GameOffer;
 import com.gendev.streamcombinations.model.main.StreamingOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.gendev.streamcombinations.model.response;
 
-import com.gendev.streamcombinations.model.*;
+import com.gendev.streamcombinations.model.helper.IDoffer;
 import com.gendev.streamcombinations.model.main.Game;
-import com.gendev.streamcombinations.model.GameOffer;
+import com.gendev.streamcombinations.model.helper.GameOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;
 import lombok.Getter;
 
