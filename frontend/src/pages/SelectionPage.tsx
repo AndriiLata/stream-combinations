@@ -63,10 +63,10 @@ const SelectionPage: React.FC = () => {
         </svg>
       </label>
 
-      <div className="flex flex-col flex-grow overflow-hidden mt-5">
+      <div className="flex flex-col flex-grow overflow-hidden mt-5 ">
         {/* Select the teams*/}
         <h3 className="text-lg font-semibold mb-2">Select Teams: </h3>
-        <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1">
+        <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1 bg-slate-100">
           <div className="card-body p-3">
             <TeamSelector
               data={data}
@@ -80,7 +80,7 @@ const SelectionPage: React.FC = () => {
         <h3 className="text-lg font-semibold mb-2 mt-6">
           Select Tournaments:{" "}
         </h3>
-        <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1">
+        <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1 bg-slate-100">
           <div className="card-body p-3">
             <TournamentSelector
               data={data}

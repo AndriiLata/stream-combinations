@@ -15,6 +15,7 @@ const Sidebar: React.FC = () => {
     setEndDate,
     mode,
     setMode,
+    setSearchResultData,
   } = useSearchContext();
   const navigate = useNavigate();
 
@@ -43,9 +44,13 @@ const Sidebar: React.FC = () => {
           endDate: endDate || undefined,
         };
         console.log("Search params:", params);
+
         const { data } = await axios.get("/streaming/cheapest-packages", {
           params: {
             teams: selectedTeams,
+            tournaments: selectedTournaments,
+            startDate,
+            endDate,
           },
           paramsSerializer: (params) => {
             const searchParams = new URLSearchParams();
@@ -60,8 +65,11 @@ const Sidebar: React.FC = () => {
             return searchParams.toString();
           },
         });
+
         console.log("Cheapest packages:", data);
-        // Store the data somewhere if needed, then navigate
+        // Store the data in context so ResultsPage can read it
+        setSearchResultData(data);
+
         setMode("results");
         navigate("/results");
       } catch (error) {
