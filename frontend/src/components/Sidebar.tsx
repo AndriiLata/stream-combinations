@@ -15,8 +15,6 @@ const Sidebar: React.FC = () => {
     setEndDate,
     mode,
     setMode,
-    selectedCountries,
-    setSelectedCountries,
   } = useSearchContext();
   const navigate = useNavigate();
 
@@ -44,8 +42,25 @@ const Sidebar: React.FC = () => {
           startDate: startDate || undefined,
           endDate: endDate || undefined,
         };
-
-        const { data } = await axios.get("/cheapest-packages", { params });
+        console.log("Search params:", params);
+        const { data } = await axios.get("/streaming/cheapest-packages", {
+          params: {
+            teams: selectedTeams,
+          },
+          paramsSerializer: (params) => {
+            const searchParams = new URLSearchParams();
+            Object.keys(params).forEach((key) => {
+              const value = params[key];
+              if (Array.isArray(value)) {
+                value.forEach((v) => searchParams.append(key, v));
+              } else if (value != null) {
+                searchParams.append(key, value);
+              }
+            });
+            return searchParams.toString();
+          },
+        });
+        console.log("Cheapest packages:", data);
         // Store the data somewhere if needed, then navigate
         setMode("results");
         navigate("/results");

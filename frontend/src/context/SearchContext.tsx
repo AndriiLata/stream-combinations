@@ -18,7 +18,7 @@ interface SearchContextType {
 const SearchContext = createContext<SearchContextType>({} as SearchContextType);
 
 interface SearchProviderProps {
-  children: React.ReactNode; // explicitly define children
+  children: React.ReactNode;
 }
 
 export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
