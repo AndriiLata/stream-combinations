@@ -29,21 +29,18 @@ public class StreamingService {
     public Set<Game> getRequiredGames(Set<String> teams, Set<String> tournaments, LocalDateTime startDate, LocalDateTime endDate) {
         Set<Game> requiredGames = new HashSet<>();
 
-        // Get games by teams
         if(teams != null) {
             for (String team : teams) {
                 requiredGames.addAll(gameFetch.getGamesByTeam(team));
             }
         }
 
-        // Get games by tournaments
         if(tournaments != null) {
             for (String tournament : tournaments) {
                 requiredGames.addAll(gameFetch.getGamesByTournament(tournament));
             }
         }
 
-        // Get games by date range
         if (startDate != null && endDate != null) {
             requiredGames.removeIf(game -> game.getStarts_at().isBefore(startDate) || game.getStarts_at().isAfter(endDate));
         }

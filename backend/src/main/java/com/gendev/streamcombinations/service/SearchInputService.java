@@ -22,46 +22,54 @@ public class SearchInputService {
             this.fetchData = fetchData;
         }
 
-        public Set<CountryTeamTournament> getCountryTeamTournaments() {
-            Set<String> tournaments = gameFetch.getAllTournaments();
-            Set<TeamCountry> teamCountries = fetchData.getTeamCountries();
+    public List<CountryTeamTournament> getCountryTeamTournaments() {
+        Set<String> tournaments = gameFetch.getAllTournaments();
+        Set<TeamCountry> teamCountries = fetchData.getTeamCountries();
 
-            Map<String, Set<String>> countryToTeamsMap = new HashMap<>();
+        Map<String, Set<String>> countryToTeamsMap = new HashMap<>();
 
-            for (TeamCountry tc : teamCountries) {
-                String country = tc.getCountry();
-                String team = tc.getTeam();
-                countryToTeamsMap.computeIfAbsent(country, k -> new HashSet<>()).add(team);
-            }
+        for (TeamCountry tc : teamCountries) {
+            String country = tc.getCountry();
+            String team = tc.getTeam();
+            countryToTeamsMap.computeIfAbsent(country, k -> new HashSet<>()).add(team);
+        }
 
-            Set<CountryTeamTournament> result = new HashSet<>();
+        List<CountryTeamTournament> result = new ArrayList<>();
+        Map<CountryTeamTournament, Integer> totalGamesMap = new HashMap<>();
 
-            // For each country, collect the tournaments its teams have participated in
-            for (Map.Entry<String, Set<String>> entry : countryToTeamsMap.entrySet()) {
-                String country = entry.getKey();
-                Set<String> teams = entry.getValue();
-                Set<String> countryTournaments = new HashSet<>();
+        // For each country, collect the tournaments its teams have participated in
+        for (Map.Entry<String, Set<String>> entry : countryToTeamsMap.entrySet()) {
+            String country = entry.getKey();
+            Set<String> teams = entry.getValue();
+            Set<String> countryTournaments = new HashSet<>();
 
-                // For each team, retrieve games and extract tournaments
-                for (String team : teams) {
-                    Set<Game> games = gameFetch.getGamesByTeam(team);
+            int totalGames = 0;
 
-                    for (Game game : games) {
-                        String tournament = game.getTournament_name();
-                        if (tournament != null && tournaments.contains(tournament)) {
-                            countryTournaments.add(tournament);
-                        }
+            // For each team, retrieve games and extract tournaments
+            for (String team : teams) {
+                Set<Game> games = gameFetch.getGamesByTeam(team);
+                totalGames += games.size();
+
+                for (Game game : games) {
+                    String tournament = game.getTournament_name();
+                    if (tournament != null && tournaments.contains(tournament)) {
+                        countryTournaments.add(tournament);
                     }
                 }
-
-                // Create and populate the CountryTeamTournament object
-                CountryTeamTournament ctt = new CountryTeamTournament(country, teams, countryTournaments);
-
-                result.add(ctt);
             }
 
-            return result;
+            // Create and populate the CountryTeamTournament object
+            CountryTeamTournament ctt = new CountryTeamTournament(country, teams, countryTournaments);
 
+            result.add(ctt);
+            totalGamesMap.put(ctt, totalGames);
         }
+
+        // Now sort the result list based on totalGames in descending order
+        result.sort((ctt1, ctt2) -> Integer.compare(totalGamesMap.get(ctt2), totalGamesMap.get(ctt1)));
+
+        return result;
+    }
+
 
 }

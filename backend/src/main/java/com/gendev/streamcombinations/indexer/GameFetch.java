@@ -22,14 +22,14 @@ public class GameFetch {
             for (Game game : gamesList) {
                 gamesById.put(game.getId(), game);
 
-                // Index by team
+                // To search by team
                 gamesByTeam.computeIfAbsent(game.getTeam_home(), k -> new HashSet<>()).add(game);
                 gamesByTeam.computeIfAbsent(game.getTeam_away(), k -> new HashSet<>()).add(game);
 
-                // Index by tournament
+                // By tournament
                 gamesByTournament.computeIfAbsent(game.getTournament_name(), k -> new HashSet<>()).add(game);
 
-                // Index by date
+                // By date
                 gamesByDate.computeIfAbsent(game.getStarts_at(), k -> new HashSet<>()).add(game);
             }
         } else {
@@ -37,7 +37,6 @@ public class GameFetch {
         }
     }
 
-    // Methods to retrieve games based on criteria
     public Set<Game> getGamesByTeam(String team) {
         return gamesByTeam.getOrDefault(team, Collections.emptySet());
     }

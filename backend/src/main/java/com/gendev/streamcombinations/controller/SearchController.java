@@ -29,7 +29,7 @@ public class SearchController {
     }
 
     @RequestMapping("/country-team-tournaments")
-    public Set<CountryTeamTournament> getCountryTeamTournaments() {
+    public List<CountryTeamTournament> getCountryTeamTournaments() {
         return searchInputService.getCountryTeamTournaments();
     }
 }
