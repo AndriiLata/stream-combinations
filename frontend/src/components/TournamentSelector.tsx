@@ -11,15 +11,21 @@ interface TournamentSelectorProps {
   data: DataType[];
   selectedCountries: string[];
   searchQuery: string;
+  showOnlyPrior: boolean; // new prop
 }
 
 const TournamentSelector: React.FC<TournamentSelectorProps> = ({
   data,
   selectedCountries,
   searchQuery,
+  showOnlyPrior,
 }) => {
-  const { selectedTournaments, setSelectedTournaments, mode } =
-    useSearchContext();
+  const {
+    selectedTournaments,
+    setSelectedTournaments,
+    mode,
+    previouslySearchedTournaments,
+  } = useSearchContext();
 
   const getTournaments = () => {
     let filteredData = data;
@@ -30,15 +36,25 @@ const TournamentSelector: React.FC<TournamentSelectorProps> = ({
     }
 
     // Flatten and deduplicate tournaments
-    const tournaments = Array.from(
+    let tournaments = Array.from(
       new Set(filteredData.flatMap((item) => item.tournaments))
     );
 
-    return searchQuery
-      ? tournaments.filter((tournament) =>
-          tournament.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : tournaments;
+    // Filter based on search query
+    if (searchQuery) {
+      tournaments = tournaments.filter((tournament) =>
+        tournament.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // If showOnlyPrior is active, show only previously searched tournaments
+    if (showOnlyPrior) {
+      tournaments = tournaments.filter((t) =>
+        previouslySearchedTournaments.includes(t)
+      );
+    }
+
+    return tournaments;
   };
 
   const tournaments = getTournaments();
@@ -63,20 +79,28 @@ const TournamentSelector: React.FC<TournamentSelectorProps> = ({
 
   return (
     <div className="flex flex-wrap mt-1">
-      {tournaments.map((tournament) => (
-        <div
-          key={tournament}
-          className={`flex items-center m-1 p-2 rounded-full cursor-pointer ${
-            selectedTournaments.includes(tournament)
-              ? "bg-purple-500 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-          onClick={() => toggleTournamentSelection(tournament)}
-        >
-          <span className="text-xl mr-2">{emojiMap[tournament]}</span>
-          <span className="font-medium">{tournament}</span>
-        </div>
-      ))}
+      {tournaments.map((tournament) => {
+        const isPreviouslySearched =
+          previouslySearchedTournaments.includes(tournament);
+
+        return (
+          <div
+            key={tournament}
+            className={`flex items-center m-1 p-2 rounded-full cursor-pointer ${
+              selectedTournaments.includes(tournament)
+                ? "bg-purple-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => toggleTournamentSelection(tournament)}
+          >
+            <span className="text-xl mr-2">{emojiMap[tournament]}</span>
+            <span className="font-medium">{tournament}</span>
+            {isPreviouslySearched && (
+              <span className="badge badge-neutral ml-2">prior</span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

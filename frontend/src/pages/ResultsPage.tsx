@@ -14,7 +14,21 @@ const ResultsPage: React.FC = () => {
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">Search Results</h1>
-        <p>Loading results or no results available...</p>
+        <p>Loading results...</p>
+      </div>
+    );
+  }
+
+  // If results are empty
+  if (searchResultData.streamingPackages.length === 0) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Search Results</h1>
+        <p>
+          Sorry but there are currently no Streaming Packages in our Dataset
+          which cover your search. Reach out to Check24 for new and current
+          Datasets.
+        </p>
       </div>
     );
   }

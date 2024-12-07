@@ -5,17 +5,25 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class DateUtils {
-    public static LocalDateTime parse(String dateString) {
-        if (dateString == null || dateString.isEmpty()) {
+    public static LocalDateTime parse(String dateTimeString) {
+        if(dateTimeString == null || dateTimeString.isEmpty()) {
             return null;
         }
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
+        LocalDateTime localDateTime = null;
         try {
-            return LocalDateTime.parse(dateString, formatter1);
-        } catch (DateTimeParseException e1) {
-            return null;
+            if (dateTimeString.length() == 10) { // yyyy-MM-dd
+
+                localDateTime = LocalDateTime.parse(dateTimeString + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            } else if (dateTimeString.length() == 19) { // yyyy-MM-dd HH:mm:ss
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                localDateTime = LocalDateTime.parse(dateTimeString, dateTimeFormatter);
+            } else {
+                throw new IllegalArgumentException("Invalid date format.");
+            }
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            System.out.println("Invalid date format or value: " + dateTimeString);
         }
+        return localDateTime;
     }
 
 }

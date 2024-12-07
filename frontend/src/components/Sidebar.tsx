@@ -16,7 +16,12 @@ const Sidebar: React.FC = () => {
     mode,
     setMode,
     setSearchResultData,
+    previouslySearchedTeams,
+    setPreviouslySearchedTeams,
+    previouslySearchedTournaments,
+    setPreviouslySearchedTournaments,
   } = useSearchContext();
+
   const navigate = useNavigate();
 
   const isEditMode = mode === "edit";
@@ -33,8 +38,6 @@ const Sidebar: React.FC = () => {
 
   const handleSearchOrEdit = async () => {
     if (isEditMode) {
-      // Perform GET request
-      console.log("Performing search...");
       try {
         const params = {
           teams: selectedTeams.length > 0 ? selectedTeams : undefined,
@@ -43,15 +46,9 @@ const Sidebar: React.FC = () => {
           startDate: startDate || undefined,
           endDate: endDate || undefined,
         };
-        console.log("Search params:", params);
 
         const { data } = await axios.get("/streaming/cheapest-packages", {
-          params: {
-            teams: selectedTeams,
-            tournaments: selectedTournaments,
-            startDate,
-            endDate,
-          },
+          params,
           paramsSerializer: (params) => {
             const searchParams = new URLSearchParams();
             Object.keys(params).forEach((key) => {
@@ -66,9 +63,15 @@ const Sidebar: React.FC = () => {
           },
         });
 
-        console.log("Cheapest packages:", data);
-        // Store the data in context so ResultsPage can read it
         setSearchResultData(data);
+
+        // Update previously searched items
+        setPreviouslySearchedTeams((prev) =>
+          Array.from(new Set([...prev, ...selectedTeams]))
+        );
+        setPreviouslySearchedTournaments((prev) =>
+          Array.from(new Set([...prev, ...selectedTournaments]))
+        );
 
         setMode("results");
         navigate("/results");
@@ -76,7 +79,6 @@ const Sidebar: React.FC = () => {
         console.error("Error fetching cheapest packages", error);
       }
     } else {
-      // If currently in results mode, "EDIT" was clicked:
       setMode("edit");
       navigate("/select");
     }

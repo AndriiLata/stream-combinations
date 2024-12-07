@@ -29,6 +29,10 @@ public class StreamingService {
     public Set<Game> getRequiredGames(Set<String> teams, Set<String> tournaments, LocalDateTime startDate, LocalDateTime endDate) {
         Set<Game> requiredGames = new HashSet<>();
 
+        if(teams==null && tournaments==null){
+             requiredGames.addAll(gameFetch.getAllGames());
+        }
+
         if(teams != null) {
             for (String team : teams) {
                 requiredGames.addAll(gameFetch.getGamesByTeam(team));

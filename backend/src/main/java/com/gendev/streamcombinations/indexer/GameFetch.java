@@ -66,5 +66,13 @@ public class GameFetch {
         return new HashSet<>(gamesByTeam.keySet());
     }
 
+    public Set<Game> getAllGames() {
+        Set<Game> allGames = new HashSet<>();
+        for (Set<Game> gameSet : gamesByTeam.values()) {
+            allGames.addAll(gameSet);
+        }
+        return allGames;
+    }
+
 
 }

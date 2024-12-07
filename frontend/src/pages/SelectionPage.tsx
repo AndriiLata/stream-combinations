@@ -15,8 +15,15 @@ const SelectionPage: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { selectedCountries, setMode } = useSearchContext();
+  const {
+    selectedCountries,
+    setMode,
+    previouslySearchedTeams,
+    previouslySearchedTournaments,
+  } = useSearchContext();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [showOnlyPriorTeams, setShowOnlyPriorTeams] = useState(false);
 
   useEffect(() => {
     setMode("edit"); // ensure we are in edit mode when on this page
@@ -34,6 +41,10 @@ const SelectionPage: React.FC = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+
+  const hasPreviouslySearchedTeams = previouslySearchedTeams.length > 0;
+  const hasPreviouslySearchedTournaments =
+    previouslySearchedTournaments.length > 0;
 
   return (
     <div className="p-4 flex flex-col h-full overflow-hidden">
@@ -63,29 +74,45 @@ const SelectionPage: React.FC = () => {
         </svg>
       </label>
 
-      <div className="flex flex-col flex-grow overflow-hidden mt-5 ">
-        {/* Select the teams*/}
-        <h3 className="text-lg font-semibold mb-2">Select Teams: </h3>
+      <div className="flex flex-col flex-grow overflow-hidden mt-5">
+        {/* Select the teams */}
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold">Select Teams: </h3>
+          <div className="flex items-center">
+            <span className="mr-2">Show Prior</span>
+            <input
+              type="checkbox"
+              className="toggle"
+              disabled={
+                !hasPreviouslySearchedTeams && !hasPreviouslySearchedTournaments
+              }
+              checked={showOnlyPriorTeams}
+              onChange={() => setShowOnlyPriorTeams(!showOnlyPriorTeams)}
+            />
+          </div>
+        </div>
         <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1 bg-slate-100">
           <div className="card-body p-3">
             <TeamSelector
               data={data}
               selectedCountries={selectedCountries}
               searchQuery={searchQuery}
+              showOnlyPrior={showOnlyPriorTeams}
             />
           </div>
         </div>
 
         {/* Select the tournaments */}
-        <h3 className="text-lg font-semibold mb-2 mt-6">
-          Select Tournaments:{" "}
-        </h3>
+        <div className="flex justify-between items-center mb-2 mt-6">
+          <h3 className="text-lg font-semibold">Select Tournaments: </h3>
+        </div>
         <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1 bg-slate-100">
           <div className="card-body p-3">
             <TournamentSelector
               data={data}
               selectedCountries={selectedCountries}
               searchQuery={searchQuery}
+              showOnlyPrior={showOnlyPriorTeams}
             />
           </div>
         </div>
