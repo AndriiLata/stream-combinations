@@ -67,7 +67,7 @@ public class StreamingService {
 
     public List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames){
         // ToDo
-        return CheapestCombinationAlgorithm.leastServicesAlgorithm(requiredGames, buildPackageToGameOffers(requiredGames));
+        return CheapestComb.findCheapestCombination(requiredGames, buildPackageToGameOffers(requiredGames));
     }
 
     public List<StreamingPackage> findLeastServicesCombination(Set<Game> requiredGames){

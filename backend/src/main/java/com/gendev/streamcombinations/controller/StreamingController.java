@@ -39,7 +39,7 @@ public class StreamingController {
     }
 
     @GetMapping("/cheapest-packages")
-    public SearchResult getCheapsetPackages(@RequestParam(required = false) Set<String> teams,
+    public SearchResult getCheapestPackages(@RequestParam(required = false) Set<String> teams,
                                             @RequestParam(required = false) Set<String> tournaments,
                                             @RequestParam(required = false) String startDate,
                                             @RequestParam(required = false) String endDate) {
