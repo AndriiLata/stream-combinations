@@ -53,7 +53,6 @@ interface SearchContextType {
     React.SetStateAction<ResponseData | null>
   >;
 
-  // New arrays for previously searched items
   previouslySearchedTeams: string[];
   setPreviouslySearchedTeams: React.Dispatch<React.SetStateAction<string[]>>;
   previouslySearchedTournaments: string[];

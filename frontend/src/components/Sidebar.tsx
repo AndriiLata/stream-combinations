@@ -94,46 +94,54 @@ const Sidebar: React.FC = () => {
         <h3 className="text-lg font-semibold mb-2">Selected Teams: </h3>
         <div className="card border border-base-300 rounded-lg overflow-y-auto shadow-lg flex-1 mb-4">
           <div className="card-body p-3">
-            {selectedTeams.map((team) => (
-              <div
-                key={team}
-                className="flex items-center bg-white text-black rounded p-2 mb-1 relative"
-              >
-                <div className="w-1 h-full bg-orange-500 absolute left-0 top-0 rounded-l"></div>
-                <span className="ml-3 flex-grow">{team}</span>
-                {isEditMode && (
-                  <button
-                    onClick={() => removeTeam(team)}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                  >
-                    X
-                  </button>
-                )}
-              </div>
-            ))}
+            {selectedTeams.length === 0 ? (
+              <div className="text-center">No teams selected</div>
+            ) : (
+              selectedTeams.map((team) => (
+                <div
+                  key={team}
+                  className="flex items-center bg-white text-black rounded p-2 mb-1 relative"
+                >
+                  <div className="w-1 h-full bg-orange-500 absolute left-0 top-0 rounded-l"></div>
+                  <span className="ml-3 flex-grow">{team}</span>
+                  {isEditMode && (
+                    <button
+                      onClick={() => removeTeam(team)}
+                      className="ml-2 text-red-500 hover:text-red-700"
+                    >
+                      X
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
 
         <h3 className="text-lg font-semibold mb-2">Selected Tournaments</h3>
         <div className="card border border-base-300 rounded-lg overflow-y-auto shadow-lg flex-1 mb-4">
           <div className="card-body p-3">
-            {selectedTournaments.map((tourney) => (
-              <div
-                key={tourney}
-                className="flex items-center bg-white text-black rounded p-2 mb-1 relative"
-              >
-                <div className="w-1 h-full bg-orange-500 absolute left-0 top-0 rounded-l"></div>
-                <span className="ml-3 flex-grow">{tourney}</span>
-                {isEditMode && (
-                  <button
-                    onClick={() => removeTournament(tourney)}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                  >
-                    X
-                  </button>
-                )}
-              </div>
-            ))}
+            {selectedTournaments.length === 0 ? (
+              <div className="text-center">No tournaments selected</div>
+            ) : (
+              selectedTournaments.map((tourney) => (
+                <div
+                  key={tourney}
+                  className="flex items-center bg-white text-black rounded p-2 mb-1 relative"
+                >
+                  <div className="w-1 h-full bg-orange-500 absolute left-0 top-0 rounded-l"></div>
+                  <span className="ml-3 flex-grow">{tourney}</span>
+                  {isEditMode && (
+                    <button
+                      onClick={() => removeTournament(tourney)}
+                      className="ml-2 text-red-500 hover:text-red-700"
+                    >
+                      X
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -156,8 +164,14 @@ const Sidebar: React.FC = () => {
         />
       </div>
 
-      <button onClick={handleSearchOrEdit} className="btn btn-primary mt-auto">
-        {isEditMode ? "SEARCH" : "EDIT"}
+      <button onClick={handleSearchOrEdit} className="btn btn-warning mt-auto">
+        {isEditMode &&
+        selectedTournaments.length == 0 &&
+        selectedTeams.length == 0
+          ? "SEARCH ALL GAMES"
+          : isEditMode
+          ? "SEARCH"
+          : "EDIT"}
       </button>
     </div>
   );

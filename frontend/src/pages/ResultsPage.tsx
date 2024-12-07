@@ -150,7 +150,7 @@ const ResultsPage: React.FC = () => {
                         pkg.monthly_price_yearly_subscription_in_cents / 100
                       ).toFixed(2)}/mo (yearly)`}
                 </div>
-                {pkg.monthly_price_cents > 0 && (
+                {pkg.monthly_price_cents !== 7777 && (
                   <div className="text-sm text-blue-800">
                     Normal: €{(pkg.monthly_price_cents / 100).toFixed(2)}/mo
                   </div>
