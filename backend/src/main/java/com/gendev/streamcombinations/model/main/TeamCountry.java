@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.model.helper;
+package com.gendev.streamcombinations.model.main;
 
 
 public class TeamCountry {

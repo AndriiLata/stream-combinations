@@ -1,10 +1,16 @@
 import React, { useMemo } from "react";
 import { useSearchContext } from "../context/SearchContext";
 
+interface TournamentInfo {
+  tournament: string;
+  startDate: string;
+  endDate: string;
+}
+
 interface DataType {
   country: string;
   teams: string[];
-  tournaments: string[];
+  tournaments: TournamentInfo[];
 }
 
 interface TeamSelectorProps {

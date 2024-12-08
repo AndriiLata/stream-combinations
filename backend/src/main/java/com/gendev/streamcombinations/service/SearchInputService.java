@@ -1,6 +1,7 @@
 package com.gendev.streamcombinations.service;
 
-import com.gendev.streamcombinations.model.helper.TeamCountry;
+import com.gendev.streamcombinations.model.helper.TournamentDateRange;
+import com.gendev.streamcombinations.model.main.TeamCountry;
 import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.response.CountryTeamTournament;
 import com.gendev.streamcombinations.util.FetchData;
@@ -8,68 +9,71 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import com.gendev.streamcombinations.indexer.*;
+import java.time.LocalDateTime;
 
 @Service
 public class SearchInputService {
 
-        private final GameFetch gameFetch;
-        private final FetchData fetchData;
+    private final GameFetch gameFetch;
+    private final FetchData fetchData;
 
-        @Autowired
-        public SearchInputService(GameFetch gameFetch, FetchData fetchData) {
-            this.gameFetch = gameFetch;
-            this.fetchData = fetchData;
-        }
+    @Autowired
+    public SearchInputService(GameFetch gameFetch, FetchData fetchData) {
+        this.gameFetch = gameFetch;
+        this.fetchData = fetchData;
+    }
 
     public List<CountryTeamTournament> getCountryTeamTournaments() {
         Set<String> tournaments = gameFetch.getAllTournaments();
-        Set<TeamCountry> teamCountries = fetchData.getTeamCountries();
-
-        Map<String, Set<String>> countryToTeamsMap = new HashMap<>();
-
-        for (TeamCountry tc : teamCountries) {
-            String country = tc.getCountry();
-            String team = tc.getTeam();
-            countryToTeamsMap.computeIfAbsent(country, k -> new HashSet<>()).add(team);
-        }
-
+        Map<String, Set<String>> countryToTeamsMap = buildCountryToTeamsMap(fetchData.getTeamCountries());
         List<CountryTeamTournament> result = new ArrayList<>();
         Map<CountryTeamTournament, Integer> totalGamesMap = new HashMap<>();
 
-        // For each country, collect the tournaments its teams have participated in
         for (Map.Entry<String, Set<String>> entry : countryToTeamsMap.entrySet()) {
             String country = entry.getKey();
             Set<String> teams = entry.getValue();
-            Set<String> countryTournaments = new HashSet<>();
-
+            Map<String, TournamentRangeTracker> trackers = new HashMap<>();
             int totalGames = 0;
 
-            // For each team, retrieve games and extract tournaments
             for (String team : teams) {
                 Set<Game> games = gameFetch.getGamesByTeam(team);
                 totalGames += games.size();
-
-                for (Game game : games) {
-                    String tournament = game.getTournament_name();
-                    if (tournament != null && tournaments.contains(tournament)) {
-                        countryTournaments.add(tournament);
-                    }
+                for (Game g : games) {
+                    String t = g.getTournament_name();
+                    if (t != null && tournaments.contains(t))
+                        trackers.computeIfAbsent(t, k -> new TournamentRangeTracker()).update(g.getStarts_at());
                 }
             }
 
-            // Create and populate the CountryTeamTournament object
-            CountryTeamTournament ctt = new CountryTeamTournament(country, teams, countryTournaments);
+            Set<TournamentDateRange> countryTournaments = trackers.entrySet().stream()
+                    .map(e -> new TournamentDateRange(e.getKey(), e.getValue().earliest, e.getValue().latest))
+                    .collect(Collectors.toSet());
 
+            CountryTeamTournament ctt = new CountryTeamTournament(country, teams, countryTournaments);
             result.add(ctt);
             totalGamesMap.put(ctt, totalGames);
         }
 
-        // Now sort the result list based on totalGames in descending order
         result.sort((ctt1, ctt2) -> Integer.compare(totalGamesMap.get(ctt2), totalGamesMap.get(ctt1)));
-
         return result;
     }
 
+    private Map<String, Set<String>> buildCountryToTeamsMap(Set<TeamCountry> teamCountries) {
+        Map<String, Set<String>> map = new HashMap<>();
+        for (TeamCountry tc : teamCountries)
+            map.computeIfAbsent(tc.getCountry(), k -> new HashSet<>()).add(tc.getTeam());
+        return map;
+    }
 
+    private static class TournamentRangeTracker {
+        LocalDateTime earliest;
+        LocalDateTime latest;
+
+        void update(LocalDateTime date) {
+            if (earliest == null || date.isBefore(earliest)) earliest = date;
+            if (latest == null || date.isAfter(latest)) latest = date;
+        }
+    }
 }

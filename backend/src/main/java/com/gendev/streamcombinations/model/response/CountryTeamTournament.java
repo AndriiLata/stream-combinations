@@ -1,5 +1,6 @@
 package com.gendev.streamcombinations.model.response;
 
+import com.gendev.streamcombinations.model.helper.TournamentDateRange;
 import lombok.Getter;
 
 import java.util.Set;
@@ -9,9 +10,9 @@ public class CountryTeamTournament {
 
     private final String country;
     private final Set<String> teams;
-    private final Set<String> tournaments;
+    private final Set<TournamentDateRange> tournaments;
 
-    public CountryTeamTournament(String country, Set<String> teams, Set<String> tournaments) {
+    public CountryTeamTournament(String country, Set<String> teams, Set<TournamentDateRange> tournaments) {
         this.country = country;
         this.teams = teams;
         this.tournaments = tournaments;

@@ -1,6 +1,6 @@
 package com.gendev.streamcombinations.util;
 
-import com.gendev.streamcombinations.model.helper.TeamCountry;
+import com.gendev.streamcombinations.model.main.TeamCountry;
 import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.main.StreamingOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;

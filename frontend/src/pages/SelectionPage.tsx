@@ -5,10 +5,16 @@ import TeamSelector from "../components/TeamSelector";
 import TournamentSelector from "../components/TournamentSelector";
 import { useSearchContext } from "../context/SearchContext";
 
+interface TournamentInfo {
+  tournament: string;
+  startDate: string;
+  endDate: string;
+}
+
 interface DataType {
   country: string;
   teams: string[];
-  tournaments: string[];
+  tournaments: TournamentInfo[];
 }
 
 const SelectionPage: React.FC = () => {
@@ -24,6 +30,11 @@ const SelectionPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [showOnlyPriorTeams, setShowOnlyPriorTeams] = useState(false);
+
+  // New states for filtering tournaments by status
+  const [showFinished, setShowFinished] = useState(false);
+  const [showLive, setShowLive] = useState(false);
+  const [showUpcoming, setShowUpcoming] = useState(false);
 
   useEffect(() => {
     setMode("edit"); // ensure we are in edit mode when on this page
@@ -105,7 +116,42 @@ const SelectionPage: React.FC = () => {
         {/* Select the tournaments */}
         <div className="flex justify-between items-center mb-2 mt-6">
           <h3 className="text-lg font-semibold">Select Tournaments: </h3>
+          <div className="flex items-center space-x-4">
+            {/* Finished checkbox */}
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showFinished}
+                onChange={() => setShowFinished(!showFinished)}
+                className="checkbox"
+              />
+              <span className="label-text">Finished</span>
+            </label>
+
+            {/* Live checkbox */}
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showLive}
+                onChange={() => setShowLive(!showLive)}
+                className="checkbox"
+              />
+              <span className="label-text">Live</span>
+            </label>
+
+            {/* Upcoming checkbox */}
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showUpcoming}
+                onChange={() => setShowUpcoming(!showUpcoming)}
+                className="checkbox"
+              />
+              <span className="label-text">Upcoming</span>
+            </label>
+          </div>
         </div>
+
         <div className="card border border-base-300 rounded-lg overflow-y-auto flex-1 bg-slate-100">
           <div className="card-body p-3">
             <TournamentSelector
@@ -113,6 +159,9 @@ const SelectionPage: React.FC = () => {
               selectedCountries={selectedCountries}
               searchQuery={searchQuery}
               showOnlyPrior={showOnlyPriorTeams}
+              showFinished={showFinished}
+              showLive={showLive}
+              showUpcoming={showUpcoming}
             />
           </div>
         </div>

@@ -120,7 +120,7 @@ const Sidebar: React.FC = () => {
 
         <h3 className="text-lg font-semibold mb-2">Selected Tournaments</h3>
         <div className="card border border-base-300 rounded-lg overflow-y-auto shadow-lg flex-1 mb-4">
-          <div className="card-body p-3">
+          <div className="card-body p-3 ">
             {selectedTournaments.length === 0 ? (
               <div className="text-center">No tournaments selected</div>
             ) : (
@@ -148,6 +148,7 @@ const Sidebar: React.FC = () => {
 
       <div className="mb-7">
         <h3 className="text-lg font-semibold mb-2">Date Range</h3>
+
         <input
           type="date"
           className="input input-bordered input-sm w-full mb-2 text-black"
