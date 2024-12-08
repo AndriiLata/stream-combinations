@@ -70,13 +70,12 @@ public class StreamingService {
     }
 
     public List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames){
-        // ToDo
         return CheapestComb.findCheapestCombination(requiredGames, buildPackageToGameOffers(requiredGames));
     }
 
-    public List<StreamingPackage> findLeastServicesCombination(Set<Game> requiredGames){
-
-        return LeastServicesAlgorithm.leastServicesAlgorithm(requiredGames, buildPackageToGameOffers(requiredGames));
-
+    public List<StreamingPackage> rankOtherPackages(Set<Game> requiredGames, Map<StreamingPackage, Set<GameOffer>> packageToGameOffers, List<StreamingPackage> streamingPackages){
+        return RankOtherPackages.rankOtherPackages(requiredGames, packageToGameOffers, streamingPackages);
     }
+
+
 }

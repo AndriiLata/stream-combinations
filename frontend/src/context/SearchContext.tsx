@@ -9,7 +9,7 @@ interface Game {
   tournament_name: string;
 }
 
-interface StreamingPackage {
+export interface StreamingPackage {
   id: number;
   name: string;
   monthly_price_cents: number;
@@ -33,6 +33,7 @@ interface ResponseData {
       [gameId: string]: OffersInfo;
     };
   };
+  otherPackages: StreamingPackage[];
 }
 
 interface SearchContextType {

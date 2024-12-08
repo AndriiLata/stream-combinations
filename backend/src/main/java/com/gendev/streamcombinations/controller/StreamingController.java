@@ -27,17 +27,6 @@ public class StreamingController {
     }
 
 
-    @GetMapping("/least-packages")
-    public SearchResult getLeastPackages(@RequestParam(required = false) Set<String> teams,
-                                              @RequestParam(required = false) Set<String> tournaments,
-                                              @RequestParam(required = false) String startDate,
-                                              @RequestParam(required = false) String endDate) {
-        Set<Game> games = streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
-        List<StreamingPackage> streamingPackages = streamingService.findLeastServicesCombination(games);
-        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = streamingService.buildPackageToGameOffers(games);
-        return new SearchResult(games, streamingPackages, packageToGameOffers);
-    }
-
     @GetMapping("/cheapest-packages")
     public SearchResult getCheapestPackages(@RequestParam(required = false) Set<String> teams,
                                             @RequestParam(required = false) Set<String> tournaments,
@@ -47,8 +36,21 @@ public class StreamingController {
         List<StreamingPackage> streamingPackages = streamingService.findCheapestCombination(games);
         Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = streamingService.buildPackageToGameOffers(games);
 
+        // Rank other packages
+        List<StreamingPackage> otherPackages = streamingService.rankOtherPackages(games, packageToGameOffers, streamingPackages);
 
-        return new SearchResult(games, streamingPackages, packageToGameOffers);
+        // Ensure every package (both chosen and other) is represented in packageToGameOffers
+        // If a package doesn't cover any games, we still want an empty set to avoid undefined issues.
+        for (StreamingPackage pkg : streamingPackages) {
+            packageToGameOffers.putIfAbsent(pkg, Collections.emptySet());
+        }
+
+        for (StreamingPackage pkg : otherPackages) {
+            packageToGameOffers.putIfAbsent(pkg, Collections.emptySet());
+        }
+
+        return new SearchResult(games, streamingPackages, packageToGameOffers, otherPackages);
     }
+
 
 }

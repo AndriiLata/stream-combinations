@@ -1,4 +1,4 @@
-package com.gendev.streamcombinations.service;
+package com.gendev.streamcombinations.service.archived;
 
 import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.helper.GameOffer;

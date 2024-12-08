@@ -14,15 +14,17 @@ public class SearchResult {
     private final Map<String, Map<Integer, Game>> gamesByTournament;
     private final List<StreamingPackage> streamingPackages;
     private final Map<Integer, Map<Integer, IDoffer>> offersToPackageID;
+    private final List<StreamingPackage> otherPackages;
 
-
-    public SearchResult(Set<Game> games, List<StreamingPackage> streamingPackages,
-                        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers) {
+    public SearchResult(Set<Game> games,
+                        List<StreamingPackage> streamingPackages,
+                        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers,
+                        List<StreamingPackage> otherPackages) {
         this.gamesByTournament = getGamesByTournament(games);
         this.streamingPackages = streamingPackages;
-        this.offersToPackageID = getOffersToPackageID(streamingPackages, packageToGameOffers);
+        this.otherPackages = otherPackages;
+        this.offersToPackageID = getOffersToPackageID(streamingPackages, otherPackages, packageToGameOffers);
     }
-
 
     private Map<String, Map<Integer, Game>> getGamesByTournament(Set<Game> games) {
         Map<String, Map<Integer, Game>> gamesByT = new HashMap<>();
@@ -35,18 +37,30 @@ public class SearchResult {
     }
 
     private Map<Integer, Map<Integer, IDoffer>> getOffersToPackageID(List<StreamingPackage> streamingPackages,
+                                                                     List<StreamingPackage> otherPackages,
                                                                      Map<StreamingPackage, Set<GameOffer>> packageToGameOffers) {
         Map<Integer, Map<Integer, IDoffer>> packagesAndOffers = new HashMap<>();
 
-        for (StreamingPackage streamingPackage : streamingPackages) {
-            packageToGameOffers.get(streamingPackage).forEach(gameOffer -> {
+        // Include best combination packages
+        for (StreamingPackage sp : streamingPackages) {
+            Set<GameOffer> offers = packageToGameOffers.getOrDefault(sp, Collections.emptySet());
+            for (GameOffer gameOffer : offers) {
                 packagesAndOffers
-                        .computeIfAbsent(streamingPackage.getId(), k -> new HashMap<>())
+                        .computeIfAbsent(sp.getId(), k -> new HashMap<>())
                         .put(gameOffer.getGame().getId(), new IDoffer(gameOffer.isLive(), gameOffer.isHighlights()));
-            });
+            }
         }
+
+        // Include other packages as well
+        for (StreamingPackage sp : otherPackages) {
+            Set<GameOffer> offers = packageToGameOffers.getOrDefault(sp, Collections.emptySet());
+            for (GameOffer gameOffer : offers) {
+                packagesAndOffers
+                        .computeIfAbsent(sp.getId(), k -> new HashMap<>())
+                        .put(gameOffer.getGame().getId(), new IDoffer(gameOffer.isLive(), gameOffer.isHighlights()));
+            }
+        }
+
         return packagesAndOffers;
-
     }
-
 }

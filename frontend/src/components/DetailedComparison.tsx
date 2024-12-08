@@ -4,11 +4,13 @@ import { useSearchContext } from "../context/SearchContext";
 interface DetailedComparisonModalProps {
   open: boolean;
   onClose: () => void;
+  displayPackages: any[]; // Change this to the correct type of your packages if you want stricter typing.
 }
 
 const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
   open,
   onClose,
+  displayPackages,
 }) => {
   const { searchResultData } = useSearchContext();
 
@@ -18,8 +20,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
 
   if (!searchResultData) return null;
 
-  const { gamesByTournament, streamingPackages, offersToPackageID } =
-    searchResultData;
+  const { gamesByTournament, offersToPackageID } = searchResultData;
 
   const toggleTournament = (tournament: string) => {
     setExpandedTournaments((prev) => ({
@@ -93,7 +94,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
                 <th className="bg-base-200 sticky top-0 z-10 px-2 py-2 text-left">
                   Tournament / Game
                 </th>
-                {streamingPackages.map((pkg, idx) => (
+                {displayPackages.map((pkg, idx) => (
                   <th
                     key={pkg.id}
                     className={`bg-base-200 sticky top-0 z-10 font-bold text-center px-2 py-2 ${
@@ -107,7 +108,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
               </tr>
               <tr>
                 <th className="bg-base-200 sticky top-0 z-10 px-2 py-1"></th>
-                {streamingPackages.map((pkg, idx) => (
+                {displayPackages.map((pkg, idx) => (
                   <React.Fragment key={pkg.id}>
                     <th
                       className={`bg-base-200 sticky top-0 z-10 font-normal text-center px-2 py-1 ${
@@ -130,7 +131,6 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
                 );
                 return (
                   <React.Fragment key={tournament}>
-                    {/* Tournament Row */}
                     <tr
                       className="hover:bg-base-100 cursor-pointer"
                       onClick={() => toggleTournament(tournament)}
@@ -143,7 +143,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
                           {tournament}
                         </div>
                       </td>
-                      {streamingPackages.map((pkg, idx) => {
+                      {displayPackages.map((pkg, idx) => {
                         const { liveCount, highlightsCount, totalGames } =
                           getTournamentCoverage(tournament, pkg.id);
                         return (
@@ -167,7 +167,6 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
                       })}
                     </tr>
 
-                    {/* Games Rows (expanded) */}
                     {expandedTournaments[tournament] &&
                       tournamentGames.map((game) => {
                         return (
@@ -176,7 +175,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
                               {game.team_home} vs {game.team_away} (
                               {new Date(game.starts_at).toLocaleString()})
                             </td>
-                            {streamingPackages.map((pkg, idx) => {
+                            {displayPackages.map((pkg, idx) => {
                               const { live, highlights } = getGameCoverage(
                                 game.id,
                                 pkg.id
