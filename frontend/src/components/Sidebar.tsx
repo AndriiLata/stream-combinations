@@ -89,8 +89,7 @@ const Sidebar: React.FC = () => {
       className=" h-full overflow-hidden bg-blue-500 text-white flex flex-col p-6"
       style={{ width: "300px", flexShrink: 0 }}
     >
-      <h2 className="text-2xl font-bold mb-6">combinationCHECK</h2>
-      <div className="flex flex-col flex-grow overflow-hidden mt-4">
+      <div className="flex flex-col flex-grow overflow-hidden mt-2">
         <h3 className="text-lg font-semibold mb-2">Selected Teams: </h3>
         <div className="card border border-base-300 rounded-lg overflow-y-auto shadow-lg flex-1 mb-4">
           <div className="card-body p-3">

@@ -19,6 +19,8 @@ public class StreamingService {
     private final GameFetch gameFetch;
     private final StreamingOfferFetch streamingOfferFetch;
     private final StreamingPackageFetch streamingPackageFetch;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public StreamingService(GameFetch gameFetch, StreamingOfferFetch streamingOfferFetch, StreamingPackageFetch streamingPackageFetch) {
@@ -53,6 +55,18 @@ public class StreamingService {
         return requiredGames;
     }
 
+    public List<StreamingPackage> getPackagesByIds(List<Integer> ids) {
+        List<StreamingPackage> result = new ArrayList<>();
+        for (Integer id : ids) {
+            StreamingPackage sp = streamingPackageFetch.getPackageById(id);
+            if (sp != null) {
+                result.add(sp);
+            }
+        }
+        return result;
+    }
+
+
     public Map<StreamingPackage, Set<GameOffer>> buildPackageToGameOffers(Set<Game> requiredGames) {
         Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = new HashMap<>();
 
@@ -75,8 +89,16 @@ public class StreamingService {
         List<StreamingPackage> allPackages = new ArrayList<>(packageToGameOffers.keySet());
         int[] costs = new int[allPackages.size()];
 
+        Set<Integer> boughtPackages = userService.getUser().getBoughtPackageIds();
+
         for (int i = 0; i < allPackages.size(); i++) {
-            costs[i] = SubscriptionCostUtil.calculateTotalCost(allPackages.get(i), monthsDifference);
+            StreamingPackage sp = allPackages.get(i);
+            // If user already bought it, cost = 0
+            if (boughtPackages.contains(sp.getId())) {
+                costs[i] = 0;
+            } else {
+                costs[i] = SubscriptionCostUtil.calculateTotalCost(sp, monthsDifference);
+            }
         }
 
         return CheapestComb.findCheapestCombination(requiredGames, packageToGameOffers, allPackages, costs);

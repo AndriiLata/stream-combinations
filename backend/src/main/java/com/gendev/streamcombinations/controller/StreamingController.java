@@ -64,5 +64,11 @@ public class StreamingController {
         return new SearchResult(games, streamingPackages, packageToGameOffers, otherPackages);
     }
 
+    @GetMapping("/packages-by-ids")
+    public List<StreamingPackage> getPackagesByIds(@RequestParam List<Integer> ids) {
+        return streamingService.getPackagesByIds(ids);
+    }
+
+
 
 }
