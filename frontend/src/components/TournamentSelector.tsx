@@ -75,10 +75,6 @@ const TournamentSelector: React.FC<TournamentSelectorProps> = ({
       );
     }
 
-    // Determine the status of each tournament
-    // isLive: now >= start && now <= end
-    // isUpcoming: now < start
-    // isFinished: now > end
     result = result.filter((t) => {
       const start = new Date(t.startDate);
       const end = new Date(t.endDate);
@@ -138,8 +134,6 @@ const TournamentSelector: React.FC<TournamentSelectorProps> = ({
         );
         const isSelected = selectedTournaments.includes(t.tournament);
         const isLive = now >= start && now <= end;
-        const isUpcoming = now < start && now < end;
-        const isFinished = now > end && now > start;
 
         return (
           <div

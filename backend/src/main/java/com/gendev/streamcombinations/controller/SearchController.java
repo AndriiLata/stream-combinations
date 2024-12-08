@@ -13,20 +13,10 @@ import java.util.*;
 @RestController
 @RequestMapping("/search")
 public class SearchController {
-    @Autowired
-    private GameFetch gameFetch;
+
     @Autowired
     private SearchInputService searchInputService;
 
-    @RequestMapping("/all-tournaments")
-    public Set<String> getTournaments() {
-        return gameFetch.getAllTournaments();
-    }
-
-    @RequestMapping("/all-teams")
-    public Set<String> getTeams() {
-        return gameFetch.getAllTeams();
-    }
 
     @RequestMapping("/country-team-tournaments")
     public List<CountryTeamTournament> getCountryTeamTournaments() {
