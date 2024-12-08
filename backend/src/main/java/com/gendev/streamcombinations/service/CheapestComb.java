@@ -11,72 +11,86 @@ import java.util.*;
 public class CheapestComb {
 
     public static List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames,
-                                                                 Map<StreamingPackage, Set<GameOffer>> packageToGameOffers) {
+                                                                 Map<StreamingPackage, Set<GameOffer>> packageToGameOffers,
+                                                                 List<StreamingPackage> allPackages,
+                                                                 int[] costs) {
         Loader.loadNativeLibraries();
 
-        // Preprocessing: build coverage structures
+        Map<StreamingPackage, Integer> pkgIndexMap = indexPackages(allPackages);
+
+        // Coverage Maps
         Map<Game, Set<StreamingPackage>> liveCoverage = new HashMap<>();
         Map<Game, Set<StreamingPackage>> highlightsCoverage = new HashMap<>();
         prepareCoverage(requiredGames, packageToGameOffers, liveCoverage, highlightsCoverage);
 
-        // Filter out games that cannot be fully covered
         Set<Game> trulyRequiredGames = filterCoverableGames(requiredGames, liveCoverage, highlightsCoverage);
         if (trulyRequiredGames.isEmpty()) {
             return new ArrayList<>();
         }
 
-        // Index packages for solver
-        List<StreamingPackage> allPackages = new ArrayList<>(packageToGameOffers.keySet());
-        Map<StreamingPackage, Integer> pkgIndexMap = indexPackages(allPackages);
-
-        // Phase 1: Minimize cost
+        // Phase 1: Minimierung Kosten
         MPSolver solver1 = createSolver();
         MPVariable[] x1 = createDecisionVariables(solver1, allPackages.size());
         addCoverageConstraints(solver1, x1, trulyRequiredGames, liveCoverage, highlightsCoverage, pkgIndexMap);
-        double minimalCost = solvePhase1(solver1, x1, allPackages);
 
-        if (Double.isNaN(minimalCost)) {
-            // No feasible solution
-            return new ArrayList<>();
+        MPObjective obj1 = solver1.objective();
+        obj1.setMinimization();
+        for (int i = 0; i < allPackages.size(); i++) {
+            obj1.setCoefficient(x1[i], costs[i]);
         }
 
-        // Phase 2: Minimize number of packages at fixed minimal cost
+        MPSolver.ResultStatus status1 = solver1.solve();
+        if (status1 != MPSolver.ResultStatus.OPTIMAL && status1 != MPSolver.ResultStatus.FEASIBLE) {
+            return new ArrayList<>();
+        }
+        double minimalCost = obj1.value();
+
+        // Phase 2: Minimale Anzahl Pakete
         MPSolver solver2 = createSolver();
         MPVariable[] x2 = createDecisionVariables(solver2, allPackages.size());
         addCoverageConstraints(solver2, x2, trulyRequiredGames, liveCoverage, highlightsCoverage, pkgIndexMap);
-        List<StreamingPackage> chosenPackages = solvePhase2(solver2, x2, allPackages, minimalCost);
 
-        if (chosenPackages.isEmpty()) {
-            // Fallback: If somehow phase 2 fails, just return phase 1 solution unsorted by coverage
+        MPConstraint costEq = solver2.makeConstraint(minimalCost, minimalCost, "cost_eq");
+        for (int i = 0; i < allPackages.size(); i++) {
+            costEq.setCoefficient(x2[i], costs[i]);
+        }
+
+        MPObjective obj2 = solver2.objective();
+        obj2.setMinimization();
+        for (MPVariable var : x2) {
+            obj2.setCoefficient(var, 1.0);
+        }
+
+        MPSolver.ResultStatus status2 = solver2.solve();
+        List<StreamingPackage> chosenPackages;
+        if (status2 == MPSolver.ResultStatus.OPTIMAL || status2 == MPSolver.ResultStatus.FEASIBLE) {
+            chosenPackages = extractChosenPackages(x2, allPackages);
+        } else {
+            // Fallback auf Phase1 Lösung
             chosenPackages = extractChosenPackages(x1, allPackages);
         }
 
-        // Sort by coverage count
         sortByGamesCovered(chosenPackages, packageToGameOffers, trulyRequiredGames);
-
         return chosenPackages;
     }
 
-    // ---------------------------- HELPER METHODS ----------------------------
 
-    /**
-     * Prepares the coverage maps for live and highlights by populating the given maps.
-     */
+
     private static void prepareCoverage(Set<Game> requiredGames,
                                         Map<StreamingPackage, Set<GameOffer>> packageToGameOffers,
                                         Map<Game, Set<StreamingPackage>> liveCoverage,
                                         Map<Game, Set<StreamingPackage>> highlightsCoverage) {
-        // Initialize maps
+
         for (Game g : requiredGames) {
             liveCoverage.put(g, new HashSet<>());
             highlightsCoverage.put(g, new HashSet<>());
         }
 
-        // Populate coverage
+
         for (Map.Entry<StreamingPackage, Set<GameOffer>> entry : packageToGameOffers.entrySet()) {
             StreamingPackage sp = entry.getKey();
             Set<GameOffer> offers = entry.getValue();
-            // Manual loop for performance
+
             for (GameOffer go : offers) {
                 Game g = go.getGame();
                 if (requiredGames.contains(g)) {
@@ -91,13 +105,11 @@ public class CheapestComb {
         }
     }
 
-    /**
-     * Filters out games that cannot be fully covered (no live or no highlights).
-     */
+    // Games filtern die nicht gecovered werden können
     private static Set<Game> filterCoverableGames(Set<Game> requiredGames,
                                                   Map<Game, Set<StreamingPackage>> liveCoverage,
                                                   Map<Game, Set<StreamingPackage>> highlightsCoverage) {
-        // Use a direct loop for performance
+
         Set<Game> result = new HashSet<>(requiredGames.size());
         for (Game g : requiredGames) {
             Set<StreamingPackage> live = liveCoverage.get(g);
@@ -109,9 +121,7 @@ public class CheapestComb {
         return result;
     }
 
-    /**
-     * Indexes packages for quick lookup in arrays.
-     */
+
     private static Map<StreamingPackage, Integer> indexPackages(List<StreamingPackage> allPackages) {
         Map<StreamingPackage, Integer> pkgIndex = new HashMap<>(allPackages.size());
         for (int i = 0; i < allPackages.size(); i++) {
@@ -120,9 +130,7 @@ public class CheapestComb {
         return pkgIndex;
     }
 
-    /**
-     * Creates a MPSolver instance with the desired solver backend.
-     */
+
     private static MPSolver createSolver() {
         MPSolver solver = MPSolver.createSolver("CBC");
         if (solver == null) {
@@ -131,9 +139,6 @@ public class CheapestComb {
         return solver;
     }
 
-    /**
-     * Creates binary decision variables x_p for each package p.
-     */
     private static MPVariable[] createDecisionVariables(MPSolver solver, int count) {
         MPVariable[] vars = new MPVariable[count];
         for (int i = 0; i < count; i++) {
@@ -142,24 +147,22 @@ public class CheapestComb {
         return vars;
     }
 
-    /**
-     * Adds coverage constraints for each game (live and highlights).
-     */
+
     private static void addCoverageConstraints(MPSolver solver,
                                                MPVariable[] x,
                                                Set<Game> trulyRequiredGames,
                                                Map<Game, Set<StreamingPackage>> liveCoverage,
                                                Map<Game, Set<StreamingPackage>> highlightsCoverage,
                                                Map<StreamingPackage, Integer> pkgIndexMap) {
-        // Build constraints
+
         for (Game g : trulyRequiredGames) {
-            // Live coverage constraint
+            // Live coverage
             MPConstraint liveC = solver.makeConstraint(1, Double.POSITIVE_INFINITY, "live_" + g.getId());
             for (StreamingPackage sp : liveCoverage.get(g)) {
                 liveC.setCoefficient(x[pkgIndexMap.get(sp)], 1.0);
             }
 
-            // Highlights coverage constraint
+            // Highlights coverage
             MPConstraint highlightsC = solver.makeConstraint(1, Double.POSITIVE_INFINITY, "highlights_" + g.getId());
             for (StreamingPackage sp : highlightsCoverage.get(g)) {
                 highlightsC.setCoefficient(x[pkgIndexMap.get(sp)], 1.0);
@@ -167,9 +170,7 @@ public class CheapestComb {
         }
     }
 
-    /**
-     * Phase 1: Minimize total cost.
-     */
+
     private static double solvePhase1(MPSolver solver1, MPVariable[] x1, List<StreamingPackage> allPackages) {
         MPObjective obj1 = solver1.objective();
         obj1.setMinimization();
@@ -184,9 +185,7 @@ public class CheapestComb {
         return obj1.value();
     }
 
-    /**
-     * Phase 2: Minimize number of packages chosen subject to minimal cost found.
-     */
+
     private static List<StreamingPackage> solvePhase2(MPSolver solver2,
                                                       MPVariable[] x2,
                                                       List<StreamingPackage> allPackages,

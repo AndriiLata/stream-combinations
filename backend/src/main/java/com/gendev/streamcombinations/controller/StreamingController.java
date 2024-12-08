@@ -9,6 +9,7 @@ import com.gendev.streamcombinations.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -32,15 +33,26 @@ public class StreamingController {
                                             @RequestParam(required = false) Set<String> tournaments,
                                             @RequestParam(required = false) String startDate,
                                             @RequestParam(required = false) String endDate) {
-        Set<Game> games = streamingService.getRequiredGames(teams, tournaments, DateUtils.parse(startDate), DateUtils.parse(endDate));
-        List<StreamingPackage> streamingPackages = streamingService.findCheapestCombination(games);
+        LocalDateTime start = DateUtils.parse(startDate);
+        LocalDateTime end = DateUtils.parse(endDate);
+
+        Set<Game> games = streamingService.getRequiredGames(teams, tournaments, start, end);
+
+        //Mein neues Feature für die Monate berechnung
+        int monthsDifference = -1;
+        if (start != null && end != null) {
+            monthsDifference = DateUtils.monthsBetween(start, end);
+            if (monthsDifference < 0) {
+                monthsDifference = -1;
+            }
+        }
+
+        List<StreamingPackage> streamingPackages = streamingService.findCheapestCombination(games, monthsDifference);
         Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = streamingService.buildPackageToGameOffers(games);
-
         // Rank other packages
-        List<StreamingPackage> otherPackages = streamingService.rankOtherPackages(games, packageToGameOffers, streamingPackages);
+        List<StreamingPackage> otherPackages = streamingService.rankOtherPackages(games, packageToGameOffers, streamingPackages, monthsDifference);
 
-        // Ensure every package (both chosen and other) is represented in packageToGameOffers
-        // If a package doesn't cover any games, we still want an empty set to avoid undefined issues.
+        // It fixed my frontend null pointer exception
         for (StreamingPackage pkg : streamingPackages) {
             packageToGameOffers.putIfAbsent(pkg, Collections.emptySet());
         }

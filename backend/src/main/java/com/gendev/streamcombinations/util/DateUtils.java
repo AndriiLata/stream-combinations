@@ -3,6 +3,7 @@ package com.gendev.streamcombinations.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 public class DateUtils {
     public static LocalDateTime parse(String dateTimeString) {
@@ -24,6 +25,10 @@ public class DateUtils {
             System.out.println("Invalid date format or value: " + dateTimeString);
         }
         return localDateTime;
+    }
+    public static int monthsBetween(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) return -1;
+        return (int) ChronoUnit.MONTHS.between(start, end);
     }
 
 }

@@ -1,9 +1,11 @@
 package com.gendev.streamcombinations.service;
+
 import com.gendev.streamcombinations.indexer.*;
-import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.helper.GameOffer;
+import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.main.StreamingOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;
+import com.gendev.streamcombinations.util.SubscriptionCostUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,6 @@ public class StreamingService {
     private final StreamingOfferFetch streamingOfferFetch;
     private final StreamingPackageFetch streamingPackageFetch;
 
-
     @Autowired
     public StreamingService(GameFetch gameFetch, StreamingOfferFetch streamingOfferFetch, StreamingPackageFetch streamingPackageFetch) {
         this.gameFetch = gameFetch;
@@ -30,7 +31,7 @@ public class StreamingService {
         Set<Game> requiredGames = new HashSet<>();
 
         if(teams==null && tournaments==null){
-             requiredGames.addAll(gameFetch.getAllGames());
+            requiredGames.addAll(gameFetch.getAllGames());
         }
 
         if(teams != null) {
@@ -69,13 +70,20 @@ public class StreamingService {
         return packageToGameOffers;
     }
 
-    public List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames){
-        return CheapestComb.findCheapestCombination(requiredGames, buildPackageToGameOffers(requiredGames));
+    public List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames, int monthsDifference) {
+        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = buildPackageToGameOffers(requiredGames);
+        List<StreamingPackage> allPackages = new ArrayList<>(packageToGameOffers.keySet());
+        int[] costs = new int[allPackages.size()];
+
+        for (int i = 0; i < allPackages.size(); i++) {
+            costs[i] = SubscriptionCostUtil.calculateTotalCost(allPackages.get(i), monthsDifference);
+        }
+
+        return CheapestComb.findCheapestCombination(requiredGames, packageToGameOffers, allPackages, costs);
     }
 
-    public List<StreamingPackage> rankOtherPackages(Set<Game> requiredGames, Map<StreamingPackage, Set<GameOffer>> packageToGameOffers, List<StreamingPackage> streamingPackages){
-        return RankOtherPackages.rankOtherPackages(requiredGames, packageToGameOffers, streamingPackages);
+    public List<StreamingPackage> rankOtherPackages(Set<Game> requiredGames, Map<StreamingPackage, Set<GameOffer>> packageToGameOffers, List<StreamingPackage> streamingPackages, int monthsDifference){
+        return RankOtherPackages.rankOtherPackages(requiredGames, packageToGameOffers, streamingPackages, monthsDifference);
     }
-
 
 }
