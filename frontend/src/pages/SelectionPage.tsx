@@ -1,53 +1,29 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import CountrySelector from "../components/CountrySelector";
-import TeamSelector from "../components/TeamSelector";
-import TournamentSelector from "../components/TournamentSelector";
+import React, { useState, useEffect } from "react";
+import CountrySelector from "../components/selectors/CountrySelector";
+import TeamSelector from "../components/selectors/TeamSelector";
+import TournamentSelector from "../components/selectors/TournamentSelector";
 import { useSearchContext } from "../context/SearchContext";
-
-interface TournamentInfo {
-  tournament: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface DataType {
-  country: string;
-  teams: string[];
-  tournaments: TournamentInfo[];
-}
+import { useCountryTeamTournaments } from "../hooks/useCountryTeamTournaments";
 
 const SelectionPage: React.FC = () => {
-  const [data, setData] = useState<DataType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const {
     selectedCountries,
     setMode,
     previouslySearchedTeams,
     previouslySearchedTournaments,
   } = useSearchContext();
+
   const [searchQuery, setSearchQuery] = useState("");
-
   const [showOnlyPriorTeams, setShowOnlyPriorTeams] = useState(false);
-
-  // New states for filtering tournaments by status
   const [showFinished, setShowFinished] = useState(false);
   const [showLive, setShowLive] = useState(false);
   const [showUpcoming, setShowUpcoming] = useState(false);
 
+  // Use the custom hook
+  const { data, loading, error } = useCountryTeamTournaments();
+
   useEffect(() => {
-    setMode("edit"); // ensure we are in edit mode when on this page
-    axios
-      .get("/search/country-team-tournaments")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
+    setMode("edit"); // Ensuring we are in edit mode
   }, [setMode]);
 
   if (loading) return <p>Loading...</p>;

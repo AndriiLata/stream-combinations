@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useSearchContext } from "../context/SearchContext";
+import { useSearchContext } from "../../context/SearchContext";
 
 interface TournamentInfo {
   tournament: string;
@@ -17,7 +17,7 @@ interface TeamSelectorProps {
   data: DataType[];
   selectedCountries: string[];
   searchQuery: string;
-  showOnlyPrior: boolean; // new prop
+  showOnlyPrior: boolean;
 }
 
 const TeamSelector: React.FC<TeamSelectorProps> = ({
@@ -37,7 +37,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
       );
     }
 
-    // Flatten and deduplicate teams
+    // Remove duplicates and get all teams
     let teams = Array.from(new Set(filteredData.flatMap((item) => item.teams)));
 
     // Filter based on search query
@@ -51,7 +51,6 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     if (showOnlyPrior) {
       teams = teams.filter((team) => previouslySearchedTeams.includes(team));
     }
-
     return teams;
   };
 

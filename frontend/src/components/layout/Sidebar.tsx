@@ -1,7 +1,7 @@
 import React from "react";
-import { useSearchContext } from "../context/SearchContext";
+import { useSearchContext } from "../../context/SearchContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useBestPackages } from "../../hooks/useBestPackages";
 
 const Sidebar: React.FC = () => {
   const {
@@ -23,6 +23,7 @@ const Sidebar: React.FC = () => {
   } = useSearchContext();
 
   const navigate = useNavigate();
+  const { fetchBestPackages, error, loading } = useBestPackages();
 
   const isEditMode = mode === "edit";
 
@@ -38,31 +39,17 @@ const Sidebar: React.FC = () => {
 
   const handleSearchOrEdit = async () => {
     if (isEditMode) {
-      try {
-        const params = {
-          teams: selectedTeams.length > 0 ? selectedTeams : undefined,
-          tournaments:
-            selectedTournaments.length > 0 ? selectedTournaments : undefined,
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-        };
+      const params = {
+        teams: selectedTeams.length > 0 ? selectedTeams : undefined,
+        tournaments:
+          selectedTournaments.length > 0 ? selectedTournaments : undefined,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+      };
 
-        const { data } = await axios.get("/streaming/cheapest-packages", {
-          params,
-          paramsSerializer: (params) => {
-            const searchParams = new URLSearchParams();
-            Object.keys(params).forEach((key) => {
-              const value = params[key];
-              if (Array.isArray(value)) {
-                value.forEach((v) => searchParams.append(key, v));
-              } else if (value != null) {
-                searchParams.append(key, value);
-              }
-            });
-            return searchParams.toString();
-          },
-        });
+      const data = await fetchBestPackages(params);
 
+      if (data) {
         setSearchResultData(data);
 
         // Update previously searched items
@@ -75,8 +62,6 @@ const Sidebar: React.FC = () => {
 
         setMode("results");
         navigate("/results");
-      } catch (error) {
-        console.error("Error fetching cheapest packages", error);
       }
     } else {
       setMode("edit");
@@ -86,7 +71,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className=" h-full overflow-hidden bg-blue-500 text-white flex flex-col p-6"
+      className="h-full overflow-hidden bg-blue-500 text-white flex flex-col p-6"
       style={{ width: "300px", flexShrink: 0 }}
     >
       <div className="flex flex-col flex-grow overflow-hidden mt-2">
@@ -164,10 +149,12 @@ const Sidebar: React.FC = () => {
         />
       </div>
 
+      {error && <p className="text-red-600 mb-2">{error}</p>}
+
       <button onClick={handleSearchOrEdit} className="btn btn-warning mt-auto">
         {isEditMode &&
-        selectedTournaments.length == 0 &&
-        selectedTeams.length == 0
+        selectedTournaments.length === 0 &&
+        selectedTeams.length === 0
           ? "SEARCH ALL GAMES"
           : isEditMode
           ? "SEARCH"

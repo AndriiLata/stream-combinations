@@ -2,13 +2,13 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { StreamingPackage } from "./SearchContext";
 
-interface UserData {
+export interface User {
   balance: number;
   boughtPackageIds: number[];
 }
 
 interface UserContextType {
-  user: UserData | null;
+  user: User | null;
   boughtPackages: StreamingPackage[];
   refreshUser: () => void;
   buyPackage: (packageId: number, costInCents: number) => Promise<void>;
@@ -20,7 +20,7 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<UserData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [boughtPackages, setBoughtPackages] = useState<StreamingPackage[]>([]);
 
   const refreshUser = async () => {

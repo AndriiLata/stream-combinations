@@ -1,4 +1,3 @@
-// SearchContext.tsx
 import React, { createContext, useState, useContext } from "react";
 
 interface Game {

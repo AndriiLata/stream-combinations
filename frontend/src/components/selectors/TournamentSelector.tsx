@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useSearchContext } from "../context/SearchContext";
+import { useSearchContext } from "../../context/SearchContext";
 
 interface TournamentInfo {
   tournament: string;
@@ -18,9 +18,9 @@ interface TournamentSelectorProps {
   selectedCountries: string[];
   searchQuery: string;
   showOnlyPrior: boolean;
-  showFinished: boolean; // new prop
-  showLive: boolean; // new prop
-  showUpcoming: boolean; // new prop
+  showFinished: boolean;
+  showLive: boolean;
+  showUpcoming: boolean;
 }
 
 const TournamentSelector: React.FC<TournamentSelectorProps> = ({
@@ -50,7 +50,6 @@ const TournamentSelector: React.FC<TournamentSelectorProps> = ({
       );
     }
 
-    // Flatten and deduplicate tournaments by their name
     const uniqueMap = new Map<string, TournamentInfo>();
     for (const item of filteredData) {
       for (const t of item.tournaments) {

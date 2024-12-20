@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSearchContext } from "../context/SearchContext";
+import { useSearchContext } from "../../context/SearchContext";
 
 interface TournamentInfo {
   tournament: string;
@@ -12,8 +12,6 @@ interface DataType {
   teams: string[];
   tournaments: TournamentInfo[];
 }
-
-// The logic in TeamSelector remains the same if teams are still strings.
 
 interface CountrySelectorProps {
   data: DataType[];
@@ -147,7 +145,6 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({ data }) => {
   );
 };
 
-// same getFlagEmoji and countryCodeToFlagEmoji as before
 function getFlagEmoji(countryName: string): string {
   const countryCodeMap: { [key: string]: string } = {
     Canada: "CA",

@@ -8,7 +8,7 @@ import com.google.ortools.linearsolver.*;
 
 import java.util.*;
 
-public class CheapestComb {
+public class BestPackageCombination {
 
     public static List<StreamingPackage> findCheapestCombination(Set<Game> requiredGames,
                                                                  Map<StreamingPackage, Set<GameOffer>> packageToGameOffers,

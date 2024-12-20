@@ -1,6 +1,9 @@
 package com.gendev.streamcombinations.model.main;
 
 
+import lombok.Getter;
+
+@Getter
 public class TeamCountry {
     private final String team;
     private final String country;
@@ -10,11 +13,4 @@ public class TeamCountry {
         this.country = country;
     }
 
-    public String getTeam() {
-        return team;
-    }
-
-    public String getCountry() {
-        return country;
-    }
 }

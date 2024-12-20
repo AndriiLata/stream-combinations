@@ -5,12 +5,16 @@ import com.gendev.streamcombinations.model.helper.GameOffer;
 import com.gendev.streamcombinations.model.main.Game;
 import com.gendev.streamcombinations.model.main.StreamingOffer;
 import com.gendev.streamcombinations.model.main.StreamingPackage;
+import com.gendev.streamcombinations.model.response.SearchResult;
+import com.gendev.streamcombinations.util.DateUtils;
 import com.gendev.streamcombinations.util.SubscriptionCostUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -101,11 +105,61 @@ public class StreamingService {
             }
         }
 
-        return CheapestComb.findCheapestCombination(requiredGames, packageToGameOffers, allPackages, costs);
+        return BestPackageCombination.findCheapestCombination(requiredGames, packageToGameOffers, allPackages, costs);
     }
 
     public List<StreamingPackage> rankOtherPackages(Set<Game> requiredGames, Map<StreamingPackage, Set<GameOffer>> packageToGameOffers, List<StreamingPackage> streamingPackages, int monthsDifference){
         return RankOtherPackages.rankOtherPackages(requiredGames, packageToGameOffers, streamingPackages, monthsDifference);
+    }
+
+    @Cacheable(
+            value = "searchResults",
+            key = "T(com.gendev.streamcombinations.service.StreamingService).buildCacheKey(#teams, #tournaments, #startDate, #endDate, @userService.getUser().boughtPackageIds)"
+    )
+    public SearchResult getBestPackagesResult(Set<String> teams, Set<String> tournaments, String startDate, String endDate) {
+        LocalDateTime start = DateUtils.parse(startDate);
+        LocalDateTime end = DateUtils.parse(endDate);
+
+        Set<Game> games = getRequiredGames(teams, tournaments, start, end);
+
+        int monthsDifference = -1;
+        if (start != null && end != null) {
+            monthsDifference = DateUtils.monthsBetween(start, end);
+            if (monthsDifference < 0) {
+                monthsDifference = -1;
+            }
+        }
+
+        List<StreamingPackage> streamingPackages = findCheapestCombination(games, monthsDifference);
+        Map<StreamingPackage, Set<GameOffer>> packageToGameOffers = buildPackageToGameOffers(games);
+        List<StreamingPackage> otherPackages = rankOtherPackages(games, packageToGameOffers, streamingPackages, monthsDifference);
+
+        for (StreamingPackage pkg : streamingPackages) {
+            packageToGameOffers.putIfAbsent(pkg, Collections.emptySet());
+        }
+
+        for (StreamingPackage pkg : otherPackages) {
+            packageToGameOffers.putIfAbsent(pkg, Collections.emptySet());
+        }
+
+        return new SearchResult(games, streamingPackages, packageToGameOffers, otherPackages);
+    }
+
+
+    public static String buildCacheKey(Set<String> teams, Set<String> tournaments, String startDate, String endDate, Set<Integer> boughtPackageIds) {
+        // Normalize sets: convert null to empty, sort them
+        String teamsKey = (teams == null || teams.isEmpty()) ? "" : teams.stream().sorted().collect(Collectors.joining(","));
+        String tournamentsKey = (tournaments == null || tournaments.isEmpty()) ? "" : tournaments.stream().sorted().collect(Collectors.joining(","));
+        String startKey = (startDate == null) ? "" : startDate;
+        String endKey = (endDate == null) ? "" : endDate;
+
+        List<Integer> sortedBoughtIds = new ArrayList<>(boughtPackageIds);
+        Collections.sort(sortedBoughtIds);
+        String userPackagesKey = sortedBoughtIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        return teamsKey + "|" + tournamentsKey + "|" + startKey + "|" + endKey + "|" + userPackagesKey;
     }
 
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSearchContext } from "../context/SearchContext";
+import { useSearchContext } from "../../context/SearchContext";
 
 interface DetailedComparisonModalProps {
   open: boolean;

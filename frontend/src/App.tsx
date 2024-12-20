@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SelectionPage from "./pages/SelectionPage";
 import ResultsPage from "./pages/ResultsPage";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 import { SearchProvider } from "./context/SearchContext";
 
 function App() {

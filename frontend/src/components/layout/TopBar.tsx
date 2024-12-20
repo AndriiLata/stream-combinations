@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useUserContext } from "../context/UserContext";
-import { useSearchContext } from "../context/SearchContext";
+import { useUserContext } from "../../context/UserContext";
+import { useSearchContext } from "../../context/SearchContext";
 
 const TopBar: React.FC = () => {
   const { user, boughtPackages } = useUserContext();
@@ -38,7 +38,7 @@ const TopBar: React.FC = () => {
                     className="card border border-base-300 bg-blue-50 shadow-md p-4 flex items-center gap-4"
                   >
                     <img
-                      src={require(`../images/${pkg.name}.png`)}
+                      src={require(`../../images/${pkg.name}.png`)}
                       alt={pkg.name}
                       className="w-12 h-12 object-contain rounded"
                     />
