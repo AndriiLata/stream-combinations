@@ -147,7 +147,6 @@ public class StreamingService {
 
 
     public static String buildCacheKey(Set<String> teams, Set<String> tournaments, String startDate, String endDate, Set<Integer> boughtPackageIds) {
-        // Normalize sets: convert null to empty, sort them
         String teamsKey = (teams == null || teams.isEmpty()) ? "" : teams.stream().sorted().collect(Collectors.joining(","));
         String tournamentsKey = (tournaments == null || tournaments.isEmpty()) ? "" : tournaments.stream().sorted().collect(Collectors.joining(","));
         String startKey = (startDate == null) ? "" : startDate;

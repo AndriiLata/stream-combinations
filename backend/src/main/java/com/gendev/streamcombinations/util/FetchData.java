@@ -21,10 +21,10 @@ public class FetchData {
 
     public FetchData() {
         CSVLoader loader = new CSVLoader();
-        this.games = loader.loadGamesFromCSV("/Users/andriilata/Desktop/GenDev24/bc_game.csv");
-        this.streamingOffers = loader.loadStreamingOfferFromCSV("/Users/andriilata/Desktop/GenDev24/bc_streaming_offer.csv");
-        this.streamingPackages = loader.loadStreamingPackageFromCSV("/Users/andriilata/Desktop/GenDev24/bc_streaming_package.csv");
-        this.teamCountries = loader.loadTeamCountryFromCSV("/Users/andriilata/Desktop/GenDev24/teams_countries.csv");
+        this.games = loader.loadGamesFromCSV("dataset/bc_game.csv");
+        this.streamingOffers = loader.loadStreamingOfferFromCSV("dataset/bc_streaming_offer.csv");
+        this.streamingPackages = loader.loadStreamingPackageFromCSV("dataset/bc_streaming_package.csv");
+        this.teamCountries = loader.loadTeamCountryFromCSV("dataset/teams_countries.csv");
     }
 
 

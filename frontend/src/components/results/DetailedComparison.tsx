@@ -4,7 +4,7 @@ import { useSearchContext } from "../../context/SearchContext";
 interface DetailedComparisonModalProps {
   open: boolean;
   onClose: () => void;
-  displayPackages: any[]; // Change this to the correct type of your packages if you want stricter typing.
+  displayPackages: any[];
 }
 
 const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
@@ -35,7 +35,7 @@ const DetailedComparisonModal: React.FC<DetailedComparisonModalProps> = ({
     } else if (coverageCount === total) {
       return "bg-green-500";
     } else {
-      return "bg-orange-400"; // partial coverage
+      return "bg-orange-400";
     }
   };
 
