@@ -22,19 +22,22 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [boughtPackages, setBoughtPackages] = useState<StreamingPackage[]>([]);
+  const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
   const refreshUser = async () => {
-    const { data } = await axios.get("/user/status");
+    const { data } = await axios.get(`${apiBaseUrl}/user/status`);
     setUser(data);
   };
 
   const buyPackage = async (packageId: number, costInCents: number) => {
-    await axios.post("/user/buy", null, { params: { packageId, costInCents } });
+    await axios.post(`${apiBaseUrl}/user/buy`, null, {
+      params: { packageId, costInCents },
+    });
     await refreshUser();
   };
 
   const topUp = async (amount: number) => {
-    await axios.post("/user/top-up", null, { params: { amount } });
+    await axios.post(`${apiBaseUrl}/user/top-up`, null, { params: { amount } });
     await refreshUser();
   };
 
@@ -45,16 +48,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const fetchBoughtPackages = async () => {
       if (user && user.boughtPackageIds.length > 0) {
-        const { data } = await axios.get("/streaming/packages-by-ids", {
-          params: { ids: user.boughtPackageIds },
-          paramsSerializer: (params) => {
-            const searchParams = new URLSearchParams();
-            params.ids.forEach((id: number) => {
-              searchParams.append("ids", id.toString());
-            });
-            return searchParams.toString();
-          },
-        });
+        const { data } = await axios.get(
+          `${apiBaseUrl}/streaming/packages-by-ids`,
+          {
+            params: { ids: user.boughtPackageIds },
+            paramsSerializer: (params) => {
+              const searchParams = new URLSearchParams();
+              params.ids.forEach((id: number) => {
+                searchParams.append("ids", id.toString());
+              });
+              return searchParams.toString();
+            },
+          }
+        );
         setBoughtPackages(data);
       } else {
         setBoughtPackages([]);

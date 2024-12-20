@@ -12,7 +12,7 @@ import PackageCard from "../components/results/PackageCard";
 import { useCoverageStats } from "../hooks/useCoverageStats";
 
 const ResultsPage: React.FC = () => {
-  const { setMode, searchResultData, setSearchResultData } = useSearchContext();
+  const { setMode, searchResultData } = useSearchContext();
   const { user, buyPackage, refreshUser } = useUserContext();
 
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +33,14 @@ const ResultsPage: React.FC = () => {
     setMode("results");
   }, [setMode]);
 
+  const gamesByTournament = searchResultData?.gamesByTournament ?? {};
+  const offersToPackageID = searchResultData?.offersToPackageID ?? {};
+
+  const { calculateStats } = useCoverageStats({
+    gamesByTournament,
+    offersToPackageID,
+  });
+
   if (!searchResultData) {
     return (
       <div className="p-6">
@@ -42,12 +50,7 @@ const ResultsPage: React.FC = () => {
     );
   }
 
-  const {
-    gamesByTournament,
-    streamingPackages,
-    offersToPackageID,
-    otherPackages,
-  } = searchResultData;
+  const { streamingPackages, otherPackages } = searchResultData;
 
   if (streamingPackages.length === 0) {
     return (
@@ -60,11 +63,6 @@ const ResultsPage: React.FC = () => {
       </div>
     );
   }
-
-  const { calculateStats } = useCoverageStats({
-    gamesByTournament,
-    offersToPackageID,
-  });
 
   const initiateBuy = (pkg: StreamingPackage) => {
     setPackageToBuy(pkg);
@@ -92,9 +90,13 @@ const ResultsPage: React.FC = () => {
     }
   };
 
+  const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
   const handleTopUp = async () => {
     // Top up 100 CheckPoints
-    await axios.post("/user/top-up", null, { params: { amount: 100 } });
+    await axios.post(`${apiBaseUrl}/user/top-up`, null, {
+      params: { amount: 100 },
+    });
     await refreshUser();
     setShowTopUpModal(false);
     setError(null);

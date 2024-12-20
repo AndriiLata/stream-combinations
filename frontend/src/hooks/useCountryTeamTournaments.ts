@@ -18,9 +18,12 @@ export const useCountryTeamTournaments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
   useEffect(() => {
+    console.log(`${apiBaseUrl}/search/country-team-tournaments`);
     axios
-      .get("/search/country-team-tournaments")
+      .get(`${apiBaseUrl}/search/country-team-tournaments`)
       .then((response) => {
         setData(response.data);
         setLoading(false);
