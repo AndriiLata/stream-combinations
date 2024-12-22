@@ -21,7 +21,6 @@ export const useCountryTeamTournaments = () => {
   const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
   useEffect(() => {
-    console.log(`${apiBaseUrl}/search/country-team-tournaments`);
     axios
       .get(`${apiBaseUrl}/search/country-team-tournaments`)
       .then((response) => {
