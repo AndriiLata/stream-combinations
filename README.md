@@ -1,29 +1,37 @@
 # STREAM COMBINATIONS
 
 <div align="center">
-  <img src="img_for_readme/detailedcomp.png" alt="Screenshot 1" width="30%" />
-  <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="30%" />
-  <img src="img_for_readme/searchresult.png" alt="Screenshot 3" width="30%" />
+  <img src="img_for_readme/searchresult.png" alt="Screenshot 1" width="70%" />
+  <br><br>
+  <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="45%" />
+  <img src="img_for_readme/detailedcomp.png" alt="Screenshot 3" width="45%" />
 </div>
 
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Algorithm Overview](#algorithm-overview)
-  - [Precaching](#precaching)
-  - [OR-Tools Solver](#or-tools-solver)
-  - [Greedy Algorithm](#greedy-algorithm)
-- [Payment Integration](#payment-integration)
-- [Data Processing](#data-processing)
-- [Challenges Faced](#challenges-faced)
-
 ## Introduction
 
-Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#challenge-description). It finds the best combination of streaming packages for specific football teams or tournaments.
+Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
+
+## Installation
+
+### Prerequisites
+- **Docker:** Ensure you have Docker installed on your machine.
+
+### Steps
+1. **Clone the Repository:**
+    ```bash
+    git clone https://github.com/AndriiLata/stream-combinations.git
+    ```
+2. **Navigate to the Project Directory:**
+    ```bash
+    cd stream-combinations
+    ```
+3. **Run the Application with Docker Compose:**
+    ```bash
+    docker-compose up
+    ```
+4. **Access the Application:**
+    Open your browser and navigate to `http://localhost:3000`
 
 ## Features
 
@@ -49,26 +57,6 @@ Welcome to **STREAM COMBINATIONS**! This application was developed as part of th
 ### DevOps
 - **Docker & Docker Compose:** 
 
-## Installation
-
-### Prerequisites
-- **Docker:** Ensure you have Docker installed on your machine.
-
-### Steps
-1. **Clone the Repository:**
-    ```bash
-    git clone https://github.com/yourusername/streaming-package-comparator.git
-    ```
-2. **Navigate to the Project Directory:**
-    ```bash
-    cd stream-combinations
-    ```
-3. **Run the Application with Docker Compose:**
-    ```bash
-    docker-compose up
-    ```
-4. **Access the Application:**
-    Open your browser and navigate to `http://localhost:3000`
 
 ## Usage
 
@@ -118,5 +106,5 @@ I also mplemented a separate CSV file to allow users to select their country, dy
 
 **Challenge Description:**
 
-*For detailed information about the challenge, refer to the [Check24 GenDev24 Challenge](#).*
+*For detailed information about the challenge, refer to the [Check24 GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge).*
 
