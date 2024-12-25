@@ -1,7 +1,7 @@
 # STREAM COMBINATIONS
 
 <div align="center">
-  <img src="img_for_readme/searchresult.png" alt="Screenshot 1" width="70%" />
+  <img src="img_for_readme/searchresult.png" alt="Screenshot 1" width="90%" />
   <br><br>
   <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="45%" />
   <img src="img_for_readme/detailedcomp.png" alt="Screenshot 3" width="45%" />
@@ -98,7 +98,7 @@ I also mplemented a separate CSV file to allow users to select their country, dy
 
 ## Challenges Faced
 
-1. Understanding OR-Tools:
+1. Understanding OR-Tools.
 2. The datasets included many games without streaming offers, leading to error.
 3. It was hard to understand if my algorithm is actually working correct, without a frontend to visualize search results in real-time.
 4. Finding the right balance between covering all games and minimizing costs required extensive experimentation with algorithm parameters.
