@@ -49,17 +49,17 @@ Welcome to **STREAM COMBINATIONS**! This application was developed as part of th
 ## Technologies Used
 
 ### Backend
-- **Java 21:** 
-- **Spring Boot:** 
-- **Google OR-Tools:** 
+- **Java 21** 
+- **Spring Boot** 
+- **Google OR-Tools** 
 
 ### Frontend
-- **React with TypeScript:** 
-- **React Router:** 
-- **daisyUI & TailwindCSS:** 
+- **React with TypeScript** 
+- **React Router** 
+- **daisyUI & TailwindCSS** 
 
 ### DevOps
-- **Docker & Docker Compose:** 
+- **Docker & Docker Compose** 
 
 
 ## Usage
