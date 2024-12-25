@@ -5,6 +5,10 @@
   <br><br>
   <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="45%" />
   <img src="img_for_readme/detailedcomp.png" alt="Screenshot 3" width="45%" />
+  <br><br>
+  <a href="https://youtu.be/AfpgP8MtM6c" target="_blank">
+    <strong>🎥 Watch Demo on YouTube</strong>
+  </a>
 </div>
 
 
