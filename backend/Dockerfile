@@ -1,5 +1,5 @@
 # backend/Dockerfile
-FROM eclipse-temurin:17-jdk as build
+FROM eclipse-temurin:21-jdk as build
 WORKDIR /app
 COPY . .
 RUN ./gradlew build -x test --no-daemon
