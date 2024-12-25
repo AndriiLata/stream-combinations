@@ -14,7 +14,7 @@
 
 ## Introduction
 
-Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
+Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
 
 ## How to run locally
 
