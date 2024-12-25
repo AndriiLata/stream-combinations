@@ -1,46 +1,122 @@
-# Getting Started with Create React App
+# STREAM COMBINATIONS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+  <img src="img_for_readme/detailedcomp.png" alt="Screenshot 1" width="30%" />
+  <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="30%" />
+  <img src="img_for_readme/searchresult.png" alt="Screenshot 3" width="30%" />
+</div>
 
-## Available Scripts
 
-In the project directory, you can run:
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Algorithm Overview](#algorithm-overview)
+  - [Precaching](#precaching)
+  - [OR-Tools Solver](#or-tools-solver)
+  - [Greedy Algorithm](#greedy-algorithm)
+- [Payment Integration](#payment-integration)
+- [Data Processing](#data-processing)
+- [Challenges Faced](#challenges-faced)
 
-### `npm start`
+## Introduction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#challenge-description). It finds the best combination of streaming packages for specific football teams or tournaments.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **Fast Performance:** Search algorithms with precaching.
+- **Team Selection:** Choose one or multiple teams and tournaments to track the matches.
+- **Optimal Combination Finder:** Best combination of packages to cover all selected games at the lowest total price.
+- **Date Range Search:** Use date ranges - it will handle both monthly and yearly subscriptions appropriately.
+- **Payment Integration:** Purchase streaming packages directly within the application, managing user balances and package costs.
+- **User-Friendly Interface:** Design was inspired by Check24's mobile app, built using React, TypeScript, and daisyUI with TailwindCSS.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies Used
 
-### `npm run build`
+### Backend
+- **Java 21:** 
+- **Spring Boot:** 
+- **Google OR-Tools:** 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend
+- **React with TypeScript:** 
+- **React Router:** 
+- **daisyUI & TailwindCSS:** 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### DevOps
+- **Docker & Docker Compose:** 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Installation
 
-### `npm run eject`
+### Prerequisites
+- **Docker:** Ensure you have Docker installed on your machine.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Steps
+1. **Clone the Repository:**
+    ```bash
+    git clone https://github.com/yourusername/streaming-package-comparator.git
+    ```
+2. **Navigate to the Project Directory:**
+    ```bash
+    cd stream-combinations
+    ```
+3. **Run the Application with Docker Compose:**
+    ```bash
+    docker-compose up
+    ```
+4. **Access the Application:**
+    Open your browser and navigate to `http://localhost:3000`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. **Select Teams:**
+   - Choose one or multiple football teams from the selection page.
+2. **View Package Comparison:**
+   - The application will display a ranked list of streaming packages based on the availability of the selected teams' matches.
+3. **Optimal Package Combination:**
+   - If no single package covers all matches, the system will suggest the best combination of packages to cover all games at the lowest cost.
+4. **Manage Subscriptions:**
+   - Use the payment feature to purchase streaming packages directly. Purchased packages are handled as free in subsequent searches.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Algorithm Overview
 
-## Learn More
+### Precaching
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+I use **precaching** mechanism from Java Spring Boot. Each search query is stored in the cache. Before executing a new search, the system checks if the exact query has been processed before. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### OR-Tools Solver
+
+The core of the search functionality leverages **Google OR-Tools**.
+
+**Why OR-Tools?**
+
+Compared to other methods like greedy algorith, OR-Tools ensures faster and more reliable optimization results.
+
+### Greedy Algorithm
+
+After determining the best combination using OR-Tools, a **greedy algorithm** ranks the remaining packages. This approach is chosen for its simplicity and speed. While it may not always find the optimal ranking, the minor inaccuracies are acceptable for presenting additional options to users.
+
+## Payment Integration
+
+This feature demonstrates the algorithm's flexibility in handling packages with varying costs and ownership statuses.
+
+## Data Processing
+
+I created multiple HashMaps for games, streaming offers, and packages to ensure fast data retrieval during searches.
+I also mplemented a separate CSV file to allow users to select their country, dynamically displaying relevant teams and tournaments.
+
+## Challenges Faced
+
+1. Understanding OR-Tools:
+2. The datasets included many games without streaming offers, leading to error.
+3. It was hard to understand if my algorithm is actually working correct, without a frontend to visualize search results in real-time.
+4. Finding the right balance between covering all games and minimizing costs required extensive experimentation with algorithm parameters.
+
+
+**Challenge Description:**
+
+*For detailed information about the challenge, refer to the [Check24 GenDev24 Challenge](#).*
+
