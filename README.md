@@ -16,7 +16,7 @@
 
 Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
 
-## Installation
+## How to run locally
 
 ### Prerequisites
 - **Docker:** Ensure you have Docker installed on your machine.
