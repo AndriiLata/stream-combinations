@@ -1,18 +1,22 @@
 # STREAM COMBINATIONS
 
 <div align="center">
-  <img src="img_for_readme/searchresult.png" alt="Screenshot 1" width="70%" />
+  <img src="img_for_readme/searchresult.png" alt="Screenshot 1" width="90%" />
   <br><br>
   <img src="img_for_readme/frontpage.png" alt="Screenshot 2" width="45%" />
   <img src="img_for_readme/detailedcomp.png" alt="Screenshot 3" width="45%" />
+  <br><br>
+  <a href="https://youtu.be/AfpgP8MtM6c" target="_blank">
+    <strong>🎥 Watch Demo on YouTube</strong>
+  </a>
 </div>
 
 
 ## Introduction
 
-Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [Check24 GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
+Welcome to **STREAM COMBINATIONS**! This application was developed as part of the [GenDev24 Challenge](#https://github.com/check24-scholarships/check24-best-combination-challenge). It finds the best combination of streaming packages for specific football teams and tournaments.
 
-## Installation
+## How to run locally
 
 ### Prerequisites
 - **Docker:** Ensure you have Docker installed on your machine.
@@ -45,17 +49,17 @@ Welcome to **STREAM COMBINATIONS**! This application was developed as part of th
 ## Technologies Used
 
 ### Backend
-- **Java 21:** 
-- **Spring Boot:** 
-- **Google OR-Tools:** 
+- **Java 21** 
+- **Spring Boot** 
+- **Google OR-Tools** 
 
 ### Frontend
-- **React with TypeScript:** 
-- **React Router:** 
-- **daisyUI & TailwindCSS:** 
+- **React with TypeScript** 
+- **React Router** 
+- **daisyUI & TailwindCSS** 
 
 ### DevOps
-- **Docker & Docker Compose:** 
+- **Docker & Docker Compose** 
 
 
 ## Usage
@@ -98,7 +102,7 @@ I also mplemented a separate CSV file to allow users to select their country, dy
 
 ## Challenges Faced
 
-1. Understanding OR-Tools:
+1. Understanding OR-Tools.
 2. The datasets included many games without streaming offers, leading to error.
 3. It was hard to understand if my algorithm is actually working correct, without a frontend to visualize search results in real-time.
 4. Finding the right balance between covering all games and minimizing costs required extensive experimentation with algorithm parameters.
